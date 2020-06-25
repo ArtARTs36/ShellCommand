@@ -2,13 +2,16 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
 
-class ShellCommand
+class ShellCommand implements ShellCommandInterface
 {
+    public const MOVE_DIR = 'cd';
+
     /** @var string */
     private $executor;
 
@@ -33,27 +36,17 @@ class ShellCommand
     }
 
     /**
-     * @param string $executor
-     * @param bool $isCheckRealpathExecutor
-     * @return ShellCommand
-     */
-    public static function getInstance(string $executor, bool $isCheckRealpathExecutor = true): ShellCommand
-    {
-        return new self($executor, $isCheckRealpathExecutor);
-    }
-
-    /**
      * @param string $dir
      * @param string $executor
      * @param bool $isCheckRealpathExecutor
      * @return ShellCommand
      */
-    public static function getInstanceWithCd(
+    public static function getInstanceWithMoveDir(
         string $dir,
         string $executor,
         bool $isCheckRealpathExecutor = true
     ): ShellCommand {
-        return (new self('cd '. $dir, $isCheckRealpathExecutor))
+        return (new self(static::MOVE_DIR . ' ' . $dir, $isCheckRealpathExecutor))
             ->addParameter($executor)
             ->addAmpersands();
     }
@@ -63,7 +56,7 @@ class ShellCommand
      *
      * @return self
      */
-    public function execute(): self
+    public function execute(): ShellCommandInterface
     {
         $this->isExecuted = true;
 
@@ -78,7 +71,7 @@ class ShellCommand
      * @param mixed $value
      * @return $this
      */
-    public function addParameter($value): self
+    public function addParameter($value): ShellCommandInterface
     {
         $this->settings[] = new ShellCommandParameter($value);
 
@@ -89,7 +82,7 @@ class ShellCommand
      * Добавить амперсанды в командную строку
      * @return $this
      */
-    public function addAmpersands(): self
+    public function addAmpersands(): ShellCommandInterface
     {
         $this->settings[] = new ShellCommandParameter('&&');
 
@@ -102,7 +95,7 @@ class ShellCommand
      * @param array $values
      * @return $this
      */
-    public function addParameters(array $values): self
+    public function addParameters(array $values): ShellCommandInterface
     {
         foreach ($values as $value) {
             $this->settings[] = new ShellCommandParameter($value);
@@ -117,7 +110,7 @@ class ShellCommand
      * @param mixed $option
      * @return $this
      */
-    public function addOption($option): self
+    public function addOption($option): ShellCommandInterface
     {
         $this->settings[] = new ShellCommandOption($option);
 
@@ -130,7 +123,7 @@ class ShellCommand
      * @param string $option
      * @return $this
      */
-    public function addCutOption($option): self
+    public function addCutOption($option): ShellCommandInterface
     {
         $this->settings[] = new ShellCommandCutOption($option);
 
@@ -144,7 +137,7 @@ class ShellCommand
      * @param string $value
      * @return $this
      */
-    public function addOptionWithValue(string $option, string $value): self
+    public function addOptionWithValue(string $option, string $value): ShellCommandInterface
     {
         $this->settings[] = new ShellCommandOption($option, $value);
 
