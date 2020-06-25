@@ -1,6 +1,10 @@
 ShellCommand
 ----
 
+### Installation:
+
+`composer require artarts36/shell-command`
+
 ### Examples:
 
 1*. Simple
