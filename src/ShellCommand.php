@@ -165,13 +165,9 @@ class ShellCommand implements ShellCommandInterface
      */
     private function prepareShellCommand(): string
     {
-        $settings = array_map(function (ShellSettingInterface $setting) {
-            return $setting->__toString();
-        }, $this->settings);
-
         return implode(' ', array_merge(
             [$this->isCheckRealpathExecutor ? realpath($this->executor) : $this->executor],
-            $settings
+            array_map('strval', $this->settings),
         ));
     }
 
