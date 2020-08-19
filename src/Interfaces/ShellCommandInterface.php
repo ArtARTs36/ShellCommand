@@ -11,10 +11,9 @@ interface ShellCommandInterface
     /**
      * @param string $dir
      * @param string $executor
-     * @param bool $isCheckRealpathExecutor
-     * @return mixed
+     * @return ShellCommandInterface
      */
-    public static function getInstanceWithMoveDir(string $dir, string $executor, bool $isCheckRealpathExecutor = true);
+    public static function getInstanceWithMoveDir(string $dir, string $executor);
 
     /**
      * @return $this

@@ -38,17 +38,13 @@ class ShellCommand implements ShellCommandInterface
     /**
      * @param string $dir
      * @param string $executor
-     * @param bool $isCheckRealpathExecutor
      * @return ShellCommand
      */
-    public static function getInstanceWithMoveDir(
-        string $dir,
-        string $executor,
-        bool $isCheckRealpathExecutor = true
-    ): ShellCommand {
-        return (new self(static::MOVE_DIR . ' ' . $dir, $isCheckRealpathExecutor))
-            ->addParameter($executor)
-            ->addAmpersands();
+    public static function getInstanceWithMoveDir(string $dir, string $executor): ShellCommand
+    {
+        return (new self(static::MOVE_DIR . ' ' . realpath($dir), false))
+            ->addAmpersands()
+            ->addParameter($executor);
     }
 
     /**

@@ -105,6 +105,19 @@ class ShellCommandTest extends TestCase
     }
 
     /**
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::getInstanceWithMoveDir
+     */
+    public function testGetInstanceWithMoveDir(): void
+    {
+        $dir = __DIR__;
+        $executor = 'git';
+
+        $command = ShellCommand::getInstanceWithMoveDir($dir, $executor);
+
+        self::assertEquals("cd {$dir} && $executor", $command->__toString());
+    }
+
+    /**
      * @return ShellCommand
      */
     protected function makeCommand(): ShellCommand
