@@ -118,6 +118,27 @@ class ShellCommandTest extends TestCase
     }
 
     /**
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::when
+     */
+    public function testWhen(): void
+    {
+        $command = (new ShellCommand('git', false))
+            ->when(false, function (ShellCommand $command) {
+                $command->addParameter('pull');
+            });
+
+        self::assertEquals('git 2>&1', $command->__toString());
+
+        //
+
+        $command->when(true, function (ShellCommand $command) {
+            $command->addParameter('pull');
+        });
+
+        self::assertEquals('git pull 2>&1', $command->__toString());
+    }
+
+    /**
      * @return ShellCommand
      */
     protected function makeCommand(): ShellCommand

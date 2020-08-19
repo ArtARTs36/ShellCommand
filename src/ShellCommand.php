@@ -141,6 +141,20 @@ class ShellCommand implements ShellCommandInterface
     }
 
     /**
+     * @param bool $condition
+     * @param \Closure $value
+     * @return ShellCommandInterface
+     */
+    public function when(bool $condition, \Closure $value): ShellCommandInterface
+    {
+        if ($condition === true) {
+            $value($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * Получить результат выполнения программы
      *
      * @return string|null

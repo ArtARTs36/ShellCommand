@@ -70,4 +70,11 @@ interface ShellCommandInterface
      * @return string
      */
     public function __toString(): string;
+
+    /**
+     * @param bool $condition
+     * @param \Closure $value
+     * @return $this
+     */
+    public function when(bool $condition, \Closure $value): self;
 }
