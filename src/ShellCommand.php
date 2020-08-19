@@ -161,10 +161,16 @@ class ShellCommand implements ShellCommandInterface
      */
     private function prepareShellCommand(): string
     {
-        return implode(' ', array_merge(
+        $cmd = implode(' ', array_merge(
             [$this->isCheckRealpathExecutor ? realpath($this->executor) : $this->executor],
             array_map('strval', $this->settings),
         ));
+
+        if (empty($cmd)) {
+            return '';
+        }
+
+        return $cmd . ' 2>&1';
     }
 
     /**

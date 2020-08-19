@@ -50,7 +50,7 @@ class ShellCommandTest extends TestCase
 
         $response = $command->__toString();
 
-        self::assertEquals("{$executor} {$parameter}", $response);
+        self::assertEquals("{$executor} {$parameter} 2>&1", $response);
 
         //
 
@@ -58,7 +58,7 @@ class ShellCommandTest extends TestCase
 
         $command->addOption('r');
 
-        self::assertEquals("{$executor} {$parameter} --{$option}", $command->__toString());
+        self::assertEquals("{$executor} {$parameter} --{$option} 2>&1", $command->__toString());
 
         //
 
@@ -66,7 +66,7 @@ class ShellCommandTest extends TestCase
 
         $command->addCutOption($cutOption);
 
-        self::assertEquals("{$executor} {$parameter} --{$option} -{$cutOption}", $command->__toString());
+        self::assertEquals("{$executor} {$parameter} --{$option} -{$cutOption} 2>&1", $command->__toString());
     }
 
     /**
@@ -81,7 +81,7 @@ class ShellCommandTest extends TestCase
             'f',
         ];
 
-        $expected = implode(' ', array_merge([$executor], $parameters));
+        $expected = implode(' ', array_merge([$executor], $parameters, ['2>&1']));
 
         $command = (new ShellCommand($executor, false))
             ->addParameters($parameters);
@@ -101,7 +101,7 @@ class ShellCommandTest extends TestCase
         $command = (new ShellCommand($executor, false))
             ->addOptionWithValue($option, $value);
 
-        self::assertEquals("{$executor} --{$option}={$value}", $command->__toString());
+        self::assertEquals("{$executor} --{$option}={$value} 2>&1", $command->__toString());
     }
 
     /**
@@ -114,7 +114,7 @@ class ShellCommandTest extends TestCase
 
         $command = ShellCommand::getInstanceWithMoveDir($dir, $executor);
 
-        self::assertEquals("cd {$dir} && $executor", $command->__toString());
+        self::assertEquals("cd {$dir} && $executor 2>&1", $command->__toString());
     }
 
     /**
