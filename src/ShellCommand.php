@@ -127,6 +127,18 @@ class ShellCommand implements ShellCommandInterface
     }
 
     /**
+     * @param string $option
+     * @param mixed $value
+     * @return ShellCommand
+     */
+    public function addCutOptionWithValue($option, $value): ShellCommandInterface
+    {
+        $this->settings[] = new ShellCommandCutOption($option, $value);
+
+        return $this;
+    }
+
+    /**
      * Добавить опцию со значением
      *
      * @param string $option
@@ -179,6 +191,8 @@ class ShellCommand implements ShellCommandInterface
             [$this->isCheckRealpathExecutor ? realpath($this->executor) : $this->executor],
             array_map('strval', $this->settings),
         ));
+
+        $cmd = trim($cmd);
 
         if (empty($cmd)) {
             return '';

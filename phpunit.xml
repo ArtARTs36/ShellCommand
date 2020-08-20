@@ -12,10 +12,7 @@
          stopOnFailure="false">
     <testsuites>
         <testsuite name="Unit">
-            <directory suffix="ShellCommandCutOptionTest.php">./tests/Unit</directory>
-            <directory suffix="ShellCommandOptionTest.php">./tests/Unit</directory>
-            <directory suffix="ShellCommandParameterTest.php">./tests/Unit</directory>
-            <directory suffix="ShellCommandTest.php">./tests/Unit</directory>
+            <directory suffix="Test.php">./tests/Unit</directory>
         </testsuite>
     </testsuites>
     <filter>

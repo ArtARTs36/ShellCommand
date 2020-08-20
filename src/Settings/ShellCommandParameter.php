@@ -34,4 +34,13 @@ class ShellCommandParameter implements ShellSettingInterface
     {
         return $this->quotes ? ('"' . $this->string . '"') : $this->string;
     }
+
+    /**
+     * @param string $raw
+     * @return bool
+     */
+    public static function is(string $raw): bool
+    {
+        return str_replace(['-', '='], '', $raw) === $raw;
+    }
 }

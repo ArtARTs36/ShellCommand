@@ -51,6 +51,13 @@ interface ShellCommandInterface
 
     /**
      * @param string $option
+     * @param mixed $value
+     * @return $this
+     */
+    public function addCutOptionWithValue($option, $value): self;
+
+    /**
+     * @param string $option
      * @param string $value
      * @return $this
      */

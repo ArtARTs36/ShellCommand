@@ -28,4 +28,14 @@ class ShellCommandParameterTest extends TestCase
 
         self::assertEquals('"'. $parameter . '"', $instance->__toString());
     }
+
+    /**
+     * @covers \ArtARTs36\ShellCommand\Settings\ShellCommandParameter::is
+     */
+    public function testIs(): void
+    {
+        self::assertTrue(ShellCommandParameter::is('artisan'));
+        self::assertFalse(ShellCommandParameter::is('-key'));
+        self::assertFalse(ShellCommandParameter::is('--key'));
+    }
 }

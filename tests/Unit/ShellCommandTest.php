@@ -67,6 +67,17 @@ class ShellCommandTest extends TestCase
         $command->addCutOption($cutOption);
 
         self::assertEquals("{$executor} {$parameter} --{$option} -{$cutOption} 2>&1", $command->__toString());
+
+        //
+
+        $value = 'ff';
+
+        $command->addCutOptionWithValue($cutOption, $value);
+
+        self::assertEquals(
+            "{$executor} {$parameter} --{$option} -{$cutOption} -{$cutOption}={$value} 2>&1",
+            $command->__toString()
+        );
     }
 
     /**
