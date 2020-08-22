@@ -7,9 +7,12 @@ use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
+use ArtARTs36\ShellCommand\Support\Unshift;
 
 class ShellCommand implements ShellCommandInterface
 {
+    use Unshift;
+
     public const MOVE_DIR = 'cd';
 
     /** @var string */
@@ -25,14 +28,12 @@ class ShellCommand implements ShellCommandInterface
     private $settings = [];
 
     /**
-     * @var bool
+     * ShellCommand constructor.
+     * @param string $executor
      */
-    private $isCheckRealpathExecutor;
-
-    public function __construct(string $executor, bool $isCheckRealpathExecutor = true)
+    public function __construct(string $executor)
     {
         $this->executor = $executor;
-        $this->isCheckRealpathExecutor = $isCheckRealpathExecutor;
     }
 
     /**
@@ -42,7 +43,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public static function getInstanceWithMoveDir(string $dir, string $executor): ShellCommand
     {
-        return (new self(static::MOVE_DIR . ' ' . realpath($dir), false))
+        return (new self(static::MOVE_DIR . ' ' . realpath($dir)))
             ->addAmpersands()
             ->addParameter($executor);
     }
@@ -65,11 +66,12 @@ class ShellCommand implements ShellCommandInterface
      * Добавить параметр в командную строку
      *
      * @param mixed $value
+     * @param bool $quotes
      * @return $this
      */
-    public function addParameter($value): ShellCommandInterface
+    public function addParameter($value, bool $quotes = false): ShellCommandInterface
     {
-        $this->settings[] = new ShellCommandParameter($value);
+        $this->addSetting(new ShellCommandParameter($value, $quotes));
 
         return $this;
     }
@@ -80,7 +82,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addAmpersands(): ShellCommandInterface
     {
-        $this->settings[] = new ShellCommandParameter('&&');
+        $this->addSetting(new ShellCommandParameter('&&'));
 
         return $this;
     }
@@ -94,7 +96,7 @@ class ShellCommand implements ShellCommandInterface
     public function addParameters(array $values): ShellCommandInterface
     {
         foreach ($values as $value) {
-            $this->settings[] = new ShellCommandParameter($value);
+            $this->addSetting(new ShellCommandParameter($value));
         }
 
         return $this;
@@ -108,7 +110,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addOption($option): ShellCommandInterface
     {
-        $this->settings[] = new ShellCommandOption($option);
+        $this->addSetting(new ShellCommandOption($option));
 
         return $this;
     }
@@ -121,7 +123,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addCutOption($option): ShellCommandInterface
     {
-        $this->settings[] = new ShellCommandCutOption($option);
+        $this->addSetting(new ShellCommandCutOption($option));
 
         return $this;
     }
@@ -133,7 +135,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addCutOptionWithValue($option, $value): ShellCommandInterface
     {
-        $this->settings[] = new ShellCommandCutOption($option, $value);
+        $this->addSetting(new ShellCommandCutOption($option, $value));
 
         return $this;
     }
@@ -147,7 +149,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addOptionWithValue(string $option, string $value): ShellCommandInterface
     {
-        $this->settings[] = new ShellCommandOption($option, $value);
+        $this->addSetting(new ShellCommandOption($option, $value));
 
         return $this;
     }
@@ -187,10 +189,7 @@ class ShellCommand implements ShellCommandInterface
      */
     private function prepareShellCommand(): string
     {
-        $cmd = implode(' ', array_merge(
-            [$this->isCheckRealpathExecutor ? realpath($this->executor) : $this->executor],
-            array_map('strval', $this->settings),
-        ));
+        $cmd = implode(' ', array_merge([$this->getExecutor()], array_map('strval', $this->settings)));
 
         $cmd = trim($cmd);
 
@@ -215,5 +214,32 @@ class ShellCommand implements ShellCommandInterface
     public function __toString(): string
     {
         return $this->prepareShellCommand();
+    }
+
+    /**
+     * @param ShellSettingInterface $setting
+     * @return ShellCommandInterface
+     */
+    private function addSetting(ShellSettingInterface $setting): ShellCommandInterface
+    {
+        if ($this->unshiftMode === true) {
+            $this->unshift[] = $setting;
+        } else {
+            $this->settings[] = $setting;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    private function getExecutor(): string
+    {
+        if ($this->executor === '') {
+            return '';
+        }
+
+        return ($real = realpath($this->executor)) ? $real : $this->executor;
     }
 }

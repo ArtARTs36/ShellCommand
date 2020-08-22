@@ -21,7 +21,6 @@ class ShellCommandTest extends TestCase
         $instance = new ShellCommand('cd');
 
         self::assertFalse($instance->isExecuted());
-        self::assertEmpty($instance->__toString());
     }
 
     /**
@@ -45,7 +44,7 @@ class ShellCommandTest extends TestCase
         $executor = 'cp';
         $parameter = 'qwerty';
 
-        $command = (new ShellCommand($executor, false))
+        $command = (new ShellCommand($executor))
             ->addParameter($parameter);
 
         $response = $command->__toString();
@@ -94,7 +93,7 @@ class ShellCommandTest extends TestCase
 
         $expected = implode(' ', array_merge([$executor], $parameters, ['2>&1']));
 
-        $command = (new ShellCommand($executor, false))
+        $command = (new ShellCommand($executor))
             ->addParameters($parameters);
 
         self::assertEquals($expected, $command->__toString());
@@ -109,7 +108,7 @@ class ShellCommandTest extends TestCase
         $value = 'fLdefmEkvcdsmsefeskeEfLfde';
         $executor = 'test-api';
 
-        $command = (new ShellCommand($executor, false))
+        $command = (new ShellCommand($executor))
             ->addOptionWithValue($option, $value);
 
         self::assertEquals("{$executor} --{$option}={$value} 2>&1", $command->__toString());
@@ -133,7 +132,7 @@ class ShellCommandTest extends TestCase
      */
     public function testWhen(): void
     {
-        $command = (new ShellCommand('git', false))
+        $command = (new ShellCommand('git'))
             ->when(false, function (ShellCommand $command) {
                 $command->addParameter('pull');
             });
@@ -150,10 +149,53 @@ class ShellCommandTest extends TestCase
     }
 
     /**
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::unshift
+     */
+    public function testUnshift(): void
+    {
+        $cmd = $this->makeCommand()
+            ->addParameter('git')
+            ->addParameter('pull');
+
+        self::assertEquals('git pull 2>&1', $cmd->__toString());
+
+        //
+
+        $cmd->unshift(function (ShellCommand $command) {
+            $command
+                ->addParameter('cd')
+                ->addParameter('/var/web')
+                ->addAmpersands();
+        });
+
+        self::assertEquals('cd /var/web && git pull 2>&1', $cmd->__toString());
+
+        //
+
+        $cmd = $this->makeCommand();
+
+        $cmd->unshift(function (ShellCommand $command) {
+            $command
+                ->addParameter('less')
+                ->addParameter('.env');
+        }, true);
+
+        self::assertEquals('less .env 2>&1', $cmd->__toString());
+
+        $cmd->unshift(function (ShellCommand $command) {
+            $command
+                ->addParameter('cd')
+                ->addParameter('/var/');
+        }, true);
+
+        self::assertEquals('cd /var/ && less .env 2>&1', $cmd->__toString());
+    }
+
+    /**
      * @return ShellCommand
      */
     protected function makeCommand(): ShellCommand
     {
-        return new ShellCommand('', false);
+        return new ShellCommand('');
     }
 }

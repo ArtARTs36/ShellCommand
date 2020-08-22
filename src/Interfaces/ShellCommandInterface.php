@@ -22,9 +22,10 @@ interface ShellCommandInterface
 
     /**
      * @param $value
+     * @param bool $quotes
      * @return $this
      */
-    public function addParameter($value): self;
+    public function addParameter($value, bool $quotes = false): self;
 
     /**
      * @return $this
@@ -84,4 +85,11 @@ interface ShellCommandInterface
      * @return $this
      */
     public function when(bool $condition, \Closure $value): self;
+
+    /**
+     * @param \Closure $closure
+     * @param bool $and
+     * @return $this
+     */
+    public function unshift(\Closure $closure, bool $and = false): self;
 }

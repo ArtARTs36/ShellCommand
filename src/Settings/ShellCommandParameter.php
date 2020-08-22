@@ -41,6 +41,6 @@ class ShellCommandParameter implements ShellSettingInterface
      */
     public static function is(string $raw): bool
     {
-        return str_replace(['-', '='], '', $raw) === $raw;
+        return strpos($raw, '-', 0) !== 0;
     }
 }

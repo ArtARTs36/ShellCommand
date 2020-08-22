@@ -40,7 +40,7 @@ final class CommandRawParser
     {
         $params = explode(' ', $this->raw);
 
-        $command = new ShellCommand('', false);
+        $command = new ShellCommand('');
 
         foreach ($params as $param) {
             if (ShellCommandParameter::is($param)) {
