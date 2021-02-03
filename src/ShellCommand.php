@@ -200,7 +200,9 @@ class ShellCommand implements ShellCommandInterface
             return '';
         }
 
-        return $this->inBackground ? $cmd . ' &' : $cmd . ' 2>&1';
+        return $this->inBackground ?
+            $cmd . ' > /dev/null 2>&1 &' :
+            $cmd . ' 2>&1';
     }
 
     /**

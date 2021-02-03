@@ -200,7 +200,7 @@ class ShellCommandTest extends TestCase
         $cmd->addParameter('cd /var/web');
         $cmd->inBackground();
 
-        self::assertEquals('cd /var/web &', $cmd->__toString());
+        self::assertEquals('cd /var/web > /dev/null 2>&1 &', $cmd->__toString());
     }
 
     /**
