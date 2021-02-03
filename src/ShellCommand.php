@@ -27,6 +27,9 @@ class ShellCommand implements ShellCommandInterface
     /** @var ShellSettingInterface[] */
     private $settings = [];
 
+    /** @var bool */
+    private $inBackground = false;
+
     /**
      * ShellCommand constructor.
      * @param string $executor
@@ -197,7 +200,7 @@ class ShellCommand implements ShellCommandInterface
             return '';
         }
 
-        return $cmd . ' 2>&1';
+        return $this->inBackground ? $cmd . ' &' : $cmd . ' 2>&1';
     }
 
     /**
@@ -214,6 +217,13 @@ class ShellCommand implements ShellCommandInterface
     public function __toString(): string
     {
         return $this->prepareShellCommand();
+    }
+
+    public function inBackground(): ShellCommandInterface
+    {
+        $this->inBackground = true;
+
+        return $this;
     }
 
     /**

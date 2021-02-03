@@ -192,6 +192,18 @@ class ShellCommandTest extends TestCase
     }
 
     /**
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::inBackground
+     */
+    public function testInBackground(): void
+    {
+        $cmd = new ShellCommand('');
+        $cmd->addParameter('cd /var/web');
+        $cmd->inBackground();
+
+        self::assertEquals('cd /var/web &', $cmd->__toString());
+    }
+
+    /**
      * @return ShellCommand
      */
     protected function makeCommand(): ShellCommand

@@ -92,4 +92,6 @@ interface ShellCommandInterface
      * @return $this
      */
     public function unshift(\Closure $closure, bool $and = false): self;
+
+    public function inBackground(): self;
 }
