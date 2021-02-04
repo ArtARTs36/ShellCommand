@@ -30,6 +30,10 @@ class ShellCommand implements ShellCommandInterface
     /** @var bool */
     private $inBackground = false;
 
+    private $outputFlow;
+
+    private $errorFlow;
+
     /**
      * ShellCommand constructor.
      * @param string $executor
@@ -200,9 +204,35 @@ class ShellCommand implements ShellCommandInterface
             return '';
         }
 
-        return $this->inBackground ?
-            $cmd . ' > /dev/null 2>&1 &' :
-            $cmd . ' 2>&1';
+        return $this->addFlowIntoCommand($cmd);
+    }
+
+    public function getErrorFlow(): string
+    {
+        if ($this->inBackground && ! $this->errorFlow) {
+            return '/dev/null';
+        }
+
+        return $this->errorFlow ?? '&'. FlowType::STDOUT;
+    }
+
+    public function getOutputFlow(): ?string
+    {
+        return $this->outputFlow;
+    }
+
+    public function setOutputFlow(string $output): ShellCommandInterface
+    {
+        $this->outputFlow = $output;
+
+        return $this;
+    }
+
+    public function setErrorFlow(string $error): ShellCommandInterface
+    {
+        $this->errorFlow = $error;
+
+        return $this;
     }
 
     /**
@@ -228,11 +258,27 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
+    protected function addFlowIntoCommand(string $command): string
+    {
+        if ($this->getOutputFlow()) {
+            $command .= ' '. $this->parseFlow(FlowType::STDOUT, $this->getOutputFlow());
+        }
+
+        $command .= ' ' . $this->parseFlow(FlowType::STDERR, $this->getErrorFlow());
+
+        return $this->inBackground ? $command . ' &' : $command;
+    }
+
+    protected function parseFlow(int $type, string $value): string
+    {
+        return $type . '>'. $value;
+    }
+
     /**
      * @param ShellSettingInterface $setting
      * @return ShellCommandInterface
      */
-    private function addSetting(ShellSettingInterface $setting): ShellCommandInterface
+    protected function addSetting(ShellSettingInterface $setting): ShellCommandInterface
     {
         if ($this->unshiftMode === true) {
             $this->unshift[] = $setting;
@@ -246,7 +292,7 @@ class ShellCommand implements ShellCommandInterface
     /**
      * @return string
      */
-    private function getExecutor(): string
+    protected function getExecutor(): string
     {
         if ($this->executor === '') {
             return '';

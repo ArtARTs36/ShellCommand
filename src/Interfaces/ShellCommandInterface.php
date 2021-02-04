@@ -94,4 +94,8 @@ interface ShellCommandInterface
     public function unshift(\Closure $closure, bool $and = false): self;
 
     public function inBackground(): self;
+
+    public function setOutputFlow(string $output): ShellCommandInterface;
+
+    public function setErrorFlow(string $error): ShellCommandInterface;
 }

@@ -196,11 +196,12 @@ class ShellCommandTest extends TestCase
      */
     public function testInBackground(): void
     {
-        $cmd = new ShellCommand('');
-        $cmd->addParameter('cd /var/web');
+        $cmd = new ShellCommand('pg_dump');
+        $cmd->addParameter('database');
+        $cmd->setOutputFlow('dump.sql');
         $cmd->inBackground();
 
-        self::assertEquals('cd /var/web > /dev/null 2>&1 &', $cmd->__toString());
+        self::assertEquals('pg_dump database 1>dump.sql 2>/dev/null &', $cmd->__toString());
     }
 
     /**
