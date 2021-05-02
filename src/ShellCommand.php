@@ -57,16 +57,12 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Выполнить программу
-     *
-     * @return self
      */
-    public function execute(): ShellCommandInterface
+    public function execute(): ExecuteResult
     {
-        $this->isExecuted = true;
+        $line = $this->prepareShellCommand();
 
-        $this->shellResult = shell_exec($this->prepareShellCommand());
-
-        return $this;
+        return new ExecuteResult($line, shell_exec($line), new \DateTime());
     }
 
     /**
@@ -176,20 +172,6 @@ class ShellCommand implements ShellCommandInterface
     }
 
     /**
-     * Получить результат выполнения программы
-     *
-     * @return string|null
-     */
-    public function getShellResult()
-    {
-        if ($this->shellResult === null && $this->isExecuted === false) {
-            $this->execute();
-        }
-
-        return $this->shellResult;
-    }
-
-    /**
      * Подготовить шелл-команду
      *
      * @return string
@@ -233,14 +215,6 @@ class ShellCommand implements ShellCommandInterface
         $this->errorFlow = $error;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isExecuted(): bool
-    {
-        return $this->isExecuted;
     }
 
     /**

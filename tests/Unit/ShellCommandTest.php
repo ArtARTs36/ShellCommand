@@ -12,18 +12,6 @@ use PHPUnit\Framework\TestCase;
 class ShellCommandTest extends TestCase
 {
     /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::__construct
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::isExecuted
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::__toString
-     */
-    public function testCreateInstance(): void
-    {
-        $instance = new ShellCommand('cd');
-
-        self::assertFalse($instance->isExecuted());
-    }
-
-    /**
      * @covers \ArtARTs36\ShellCommand\ShellCommand::addAmpersands
      */
     public function testAddAmpersands(): void

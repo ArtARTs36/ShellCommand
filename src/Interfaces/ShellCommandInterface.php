@@ -2,6 +2,8 @@
 
 namespace ArtARTs36\ShellCommand\Interfaces;
 
+use ArtARTs36\ShellCommand\ExecuteResult;
+
 /**
  * Interface ShellCommandInterface
  * @package ArtARTs36\ShellCommand\Interfaces
@@ -15,10 +17,7 @@ interface ShellCommandInterface
      */
     public static function getInstanceWithMoveDir(string $dir, string $executor);
 
-    /**
-     * @return $this
-     */
-    public function execute(): self;
+    public function execute(): ExecuteResult;
 
     /**
      * @param $value
@@ -63,16 +62,6 @@ interface ShellCommandInterface
      * @return $this
      */
     public function addOptionWithValue(string $option, string $value): self;
-
-    /**
-     * @return mixed
-     */
-    public function getShellResult();
-
-    /**
-     * @return bool
-     */
-    public function isExecuted(): bool;
 
     /**
      * @return string
