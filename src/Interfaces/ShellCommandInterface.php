@@ -105,5 +105,9 @@ interface ShellCommandInterface
      */
     public function setErrorFlow(string $error): ShellCommandInterface;
 
-    public function addRedirectToFlow(int $flowType, string $flow): self;
+    public function addErrorFlowRedirect(string $to): ShellCommandInterface;
+
+    public function addInputFlowRedirect(string $to): ShellCommandInterface;
+
+    public function addOutputFlowRedirect(string $to): ShellCommandInterface;
 }

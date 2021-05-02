@@ -259,9 +259,23 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
-    public function addRedirectToFlow(int $flowType, string $flow): self
+    public function addErrorFlowRedirect(string $to): ShellCommandInterface
     {
-        $this->addSetting(new FlowRedirect($flowType, $flow));
+        $this->addSetting(new FlowRedirect(FlowType::STDERR, $to));
+
+        return $this;
+    }
+
+    public function addOutputFlowRedirect(string $to): ShellCommandInterface
+    {
+        $this->addSetting(new FlowRedirect(FlowType::STDOUT, $to));
+
+        return $this;
+    }
+
+    public function addInputFlowRedirect(string $to): ShellCommandInterface
+    {
+        $this->addSetting(new FlowRedirect(FlowType::STDIN, $to));
 
         return $this;
     }
