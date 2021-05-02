@@ -98,4 +98,6 @@ interface ShellCommandInterface
     public function setOutputFlow(string $output): ShellCommandInterface;
 
     public function setErrorFlow(string $error): ShellCommandInterface;
+
+    public function addRedirectToFlow(int $flowType, string $flow): self;
 }

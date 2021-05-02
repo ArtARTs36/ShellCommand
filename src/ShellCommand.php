@@ -4,6 +4,7 @@ namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
+use ArtARTs36\ShellCommand\Settings\FlowRedirect;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -254,6 +255,13 @@ class ShellCommand implements ShellCommandInterface
     public function inBackground(): ShellCommandInterface
     {
         $this->inBackground = true;
+
+        return $this;
+    }
+
+    public function addRedirectToFlow(int $flowType, string $flow): self
+    {
+        $this->addSetting(new FlowRedirect($flowType, $flow));
 
         return $this;
     }
