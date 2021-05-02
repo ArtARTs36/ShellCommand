@@ -95,8 +95,14 @@ interface ShellCommandInterface
 
     public function inBackground(): self;
 
+    /**
+     * @deprecated
+     */
     public function setOutputFlow(string $output): ShellCommandInterface;
 
+    /**
+     * @deprecated
+     */
     public function setErrorFlow(string $error): ShellCommandInterface;
 
     public function addRedirectToFlow(int $flowType, string $flow): self;
