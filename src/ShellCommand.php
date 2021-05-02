@@ -217,11 +217,17 @@ class ShellCommand implements ShellCommandInterface
         return $this->errorFlow ?? '&'. FlowType::STDOUT;
     }
 
+    /**
+     * @deprecated
+     */
     public function getOutputFlow(): ?string
     {
         return $this->outputFlow;
     }
 
+    /**
+     * @deprecated
+     */
     public function setOutputFlow(string $output): ShellCommandInterface
     {
         $this->outputFlow = $output;
@@ -229,6 +235,9 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
+    /**
+     * @deprecated
+     */
     public function setErrorFlow(string $error): ShellCommandInterface
     {
         $this->errorFlow = $error;
