@@ -103,14 +103,14 @@ class ShellCommandTest extends TestCase
     }
 
     /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::getInstanceWithMoveDir
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::withNavigateToDir
      */
-    public function testGetInstanceWithMoveDir(): void
+    public function testWithNavigateToDir(): void
     {
         $dir = __DIR__;
         $executor = 'git';
 
-        $command = ShellCommand::getInstanceWithMoveDir($dir, $executor);
+        $command = ShellCommand::withNavigateToDir($dir, $executor);
 
         self::assertEquals("cd {$dir} && $executor 2>&1", $command->__toString());
     }

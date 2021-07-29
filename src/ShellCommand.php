@@ -18,7 +18,7 @@ class ShellCommand implements ShellCommandInterface
     use Unshift;
     use HasSubCommands;
 
-    public const MOVE_DIR = 'cd';
+    public const NAVIGATE_TO_DIR = 'cd';
 
     private $executor;
 
@@ -39,16 +39,16 @@ class ShellCommand implements ShellCommandInterface
         $this->exceptions = $exceptions ?? new ResultExceptionHandler();
     }
 
-    /**
-     * @param string $dir
-     * @param string $executor
-     * @return ShellCommand
-     */
-    public static function getInstanceWithMoveDir(string $dir, string $executor): ShellCommand
+    public static function withNavigateToDir(string $dir, string $executor): ShellCommand
     {
-        return (new self(static::MOVE_DIR . ' ' . realpath($dir)))
+        return (new static(static::NAVIGATE_TO_DIR . ' ' . realpath($dir)))
             ->addAmpersands()
             ->addParameter($executor);
+    }
+
+    public static function make(string $executor = ''): ShellCommandInterface
+    {
+        return (new static($executor));
     }
 
     /**
@@ -79,12 +79,9 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Добавить параметр в командную строку
-     *
-     * @param mixed $value
-     * @param bool $quotes
      * @return $this
      */
-    public function addParameter($value, bool $quotes = false): ShellCommandInterface
+    public function addParameter(string $value, bool $quotes = false): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandParameter($value, $quotes));
 
@@ -104,8 +101,6 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Добавить параметры в командную строку
-     *
-     * @param array $values
      * @return $this
      */
     public function addParameters(array $values): ShellCommandInterface
@@ -120,10 +115,9 @@ class ShellCommand implements ShellCommandInterface
     /**
      * Добавить опцию в командную строку
      *
-     * @param mixed $option
      * @return $this
      */
-    public function addOption($option): ShellCommandInterface
+    public function addOption(string $option): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandOption($option));
 
@@ -132,23 +126,16 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Добавить опцию в командную строку
-     *
-     * @param string $option
      * @return $this
      */
-    public function addCutOption($option): ShellCommandInterface
+    public function addCutOption(string $option): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandCutOption($option));
 
         return $this;
     }
 
-    /**
-     * @param string $option
-     * @param mixed $value
-     * @return ShellCommand
-     */
-    public function addCutOptionWithValue($option, $value): ShellCommandInterface
+    public function addCutOptionWithValue(string $option, string $value): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandCutOption($option, $value));
 
@@ -157,10 +144,6 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Добавить опцию со значением
-     *
-     * @param string $option
-     * @param string $value
-     * @return $this
      */
     public function addOptionWithValue(string $option, string $value): ShellCommandInterface
     {
@@ -169,11 +152,6 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
-    /**
-     * @param bool $condition
-     * @param \Closure $value
-     * @return ShellCommandInterface
-     */
     public function when(bool $condition, \Closure $value): ShellCommandInterface
     {
         if ($condition === true) {
@@ -183,11 +161,6 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
-    /**
-     * Подготовить шелл-команду
-     *
-     * @return string
-     */
     private function prepareShellCommand(): string
     {
         $cmd = implode(' ', array_merge([$this->getExecutor()], array_map('strval', $this->settings)));
@@ -198,7 +171,15 @@ class ShellCommand implements ShellCommandInterface
             return '';
         }
 
-        return $this->addFlowIntoCommand($cmd) . ' ' . $this->buildJoinCommands();
+        $cmd = $this->addFlowIntoCommand($cmd);
+
+        $joined = $this->buildJoinCommands();
+
+        if ($joined !== '') {
+            $cmd .= $joined;
+        }
+
+        return $cmd;
     }
 
     public function getErrorFlow(): string

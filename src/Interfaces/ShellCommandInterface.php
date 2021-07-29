@@ -4,27 +4,27 @@ namespace ArtARTs36\ShellCommand\Interfaces;
 
 use ArtARTs36\ShellCommand\Result\CommandResult;
 
-/**
- * Interface ShellCommandInterface
- * @package ArtARTs36\ShellCommand\Interfaces
- */
 interface ShellCommandInterface
 {
     /**
-     * @param string $dir
-     * @param string $executor
+     * @param string $dir - path to navigate to folder
+     * @param string $executor - executor alias or path
      * @return ShellCommandInterface
      */
-    public static function getInstanceWithMoveDir(string $dir, string $executor);
+    public static function withNavigateToDir(string $dir, string $executor);
 
+    public static function make(string $executor = ''): ShellCommandInterface;
+
+    /**
+     * Execute the shell script
+     */
     public function execute(): CommandResult;
 
     /**
-     * @param $value
-     * @param bool $quotes
+     * @param bool $quotes - is wrap to quotes
      * @return $this
      */
-    public function addParameter($value, bool $quotes = false): self;
+    public function addParameter(string $value, bool $quotes = false): self;
 
     /**
      * @return $this
@@ -43,17 +43,14 @@ interface ShellCommandInterface
     public function addOption(string $option): self;
 
     /**
-     * @param $option
      * @return $this
      */
-    public function addCutOption($option): self;
+    public function addCutOption(string $option): self;
 
     /**
-     * @param string $option
-     * @param mixed $value
      * @return $this
      */
-    public function addCutOptionWithValue($option, $value): self;
+    public function addCutOptionWithValue(string $option, string $value): self;
 
     /**
      * @param string $option
