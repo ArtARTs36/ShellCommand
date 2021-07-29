@@ -2,6 +2,8 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
+use ArtARTs36\ShellCommand\Exceptions\ResultExceptionHandler;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
@@ -19,32 +21,28 @@ class ShellCommand implements ShellCommandInterface
 
     public const MOVE_DIR = 'cd';
 
-    /** @var string */
     private $executor;
 
-    /** @var bool */
     private $isExecuted = false;
 
-    /** @var string */
+    /** @var string|null */
     private $shellResult = null;
 
     /** @var ShellSettingInterface[] */
     private $settings = [];
 
-    /** @var bool */
     private $inBackground = false;
 
     private $outputFlow;
 
     private $errorFlow;
 
-    /**
-     * ShellCommand constructor.
-     * @param string $executor
-     */
-    public function __construct(string $executor)
+    private $exceptions;
+
+    public function __construct(string $executor, ?ResultExceptionHandler $exceptions = null)
     {
         $this->executor = $executor;
+        $this->exceptions = $exceptions ?? new ResultExceptionHandler();
     }
 
     /**
@@ -71,6 +69,18 @@ class ShellCommand implements ShellCommandInterface
         exec($line, $result, $code);
 
         return new CommandResult($line, shell_exec($line), new \DateTime(), $code);
+    }
+
+    /**
+     * @throws CommandFailed
+     */
+    public function executeOrFail(): CommandResult
+    {
+        $result = $this->execute();
+
+        $this->exceptions->handle($result);
+
+        return $result;
     }
 
     /**
