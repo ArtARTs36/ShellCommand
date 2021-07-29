@@ -13,7 +13,8 @@ class ShellCommand implements ShellCommandInterface
 {
     use Unshift;
 
-    public const MOVE_DIR = 'cd';
+    public const NAVIGATE_TO_DIR = 'cd';
+    public const MOVE_DIR = self::NAVIGATE_TO_DIR;
 
     /** @var string */
     private $executor;
@@ -46,13 +47,31 @@ class ShellCommand implements ShellCommandInterface
     /**
      * @param string $dir
      * @param string $executor
+     * @deprecated
      * @return ShellCommand
      */
     public static function getInstanceWithMoveDir(string $dir, string $executor): ShellCommand
     {
-        return (new self(static::MOVE_DIR . ' ' . realpath($dir)))
+        trigger_error(
+            'Method ShellCommandInterface::getInstanceWithMoveDir is deprecated.' .
+            'Will be removed in v. 2.0' .
+            'Should use ShellCommandInterface::withNavigateToDir',
+            E_USER_DEPRECATED
+        );
+
+        return static::withNavigateToDir($dir, $executor);
+    }
+
+    public static function withNavigateToDir(string $dir, string $executor): ShellCommand
+    {
+        return (new static(static::NAVIGATE_TO_DIR . ' ' . realpath($dir)))
             ->addAmpersands()
             ->addParameter($executor);
+    }
+
+    public static function make(string $executor = ''): ShellCommandInterface
+    {
+        return new static($executor);
     }
 
     /**

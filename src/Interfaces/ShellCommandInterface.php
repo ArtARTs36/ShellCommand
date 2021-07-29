@@ -12,8 +12,17 @@ interface ShellCommandInterface
      * @param string $dir
      * @param string $executor
      * @return ShellCommandInterface
+     * @deprecated
      */
     public static function getInstanceWithMoveDir(string $dir, string $executor);
+
+    /**
+     * @param string $dir - path to navigate to folder
+     * @param string $executor - executor alias or path
+     */
+    public static function withNavigateToDir(string $dir, string $executor);
+
+    public static function make(string $executor = ''): ShellCommandInterface;
 
     /**
      * @return $this
