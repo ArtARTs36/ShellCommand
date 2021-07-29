@@ -2,7 +2,7 @@
 
 namespace ArtARTs36\ShellCommand\Interfaces;
 
-use ArtARTs36\ShellCommand\ExecuteResult;
+use ArtARTs36\ShellCommand\Result\CommandResult;
 
 /**
  * Interface ShellCommandInterface
@@ -17,7 +17,7 @@ interface ShellCommandInterface
      */
     public static function getInstanceWithMoveDir(string $dir, string $executor);
 
-    public function execute(): ExecuteResult;
+    public function execute(): CommandResult;
 
     /**
      * @param $value
@@ -32,16 +32,15 @@ interface ShellCommandInterface
     public function addAmpersands(): self;
 
     /**
-     * @param array $values
+     * @param array<string> $values
      * @return $this
      */
     public function addParameters(array $values): self;
 
     /**
-     * @param $option
      * @return $this
      */
-    public function addOption($option): self;
+    public function addOption(string $option): self;
 
     /**
      * @param $option

@@ -4,6 +4,7 @@ namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
+use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -58,11 +59,15 @@ class ShellCommand implements ShellCommandInterface
     /**
      * Выполнить программу
      */
-    public function execute(): ExecuteResult
+    public function execute(): CommandResult
     {
         $line = $this->prepareShellCommand();
+        $result = null;
+        $code = null;
 
-        return new ExecuteResult($line, shell_exec($line), new \DateTime());
+        exec($line, $result, $code);
+
+        return new CommandResult($line, shell_exec($line), new \DateTime(), $code);
     }
 
     /**

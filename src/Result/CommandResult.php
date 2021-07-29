@@ -1,16 +1,16 @@
 <?php
 
-namespace ArtARTs36\ShellCommand;
+namespace ArtARTs36\ShellCommand\Result;
 
-class ExecuteResult
+class CommandResult
 {
-    protected $commandLine;
+    private $commandLine;
 
-    protected $result;
+    private $result;
 
-    protected $date;
+    private $date;
 
-    protected $code;
+    private $code;
 
     public function __construct(string $commandLine, ?string $result, \DateTimeInterface $date, int $code)
     {
@@ -33,5 +33,15 @@ class ExecuteResult
     public function getResult(): ?string
     {
         return $this->result;
+    }
+
+    public function isNull(): bool
+    {
+        return $this->result === null;
+    }
+
+    public function getCode(): int
+    {
+        return $this->code;
     }
 }
