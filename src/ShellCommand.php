@@ -8,11 +8,14 @@ use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
+use ArtARTs36\ShellCommand\Settings\ShellCommandSub;
+use ArtARTs36\ShellCommand\Support\HasSubCommands;
 use ArtARTs36\ShellCommand\Support\Unshift;
 
 class ShellCommand implements ShellCommandInterface
 {
     use Unshift;
+    use HasSubCommands;
 
     public const MOVE_DIR = 'cd';
 
@@ -90,7 +93,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addAmpersands(): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandParameter('&&'));
+        $this->addSetting(ShellCommandParameter::ampersands());
 
         return $this;
     }
@@ -191,7 +194,7 @@ class ShellCommand implements ShellCommandInterface
             return '';
         }
 
-        return $this->addFlowIntoCommand($cmd);
+        return $this->addFlowIntoCommand($cmd) . ' ' . $this->buildJoinCommands();
     }
 
     public function getErrorFlow(): string

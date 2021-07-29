@@ -86,4 +86,9 @@ interface ShellCommandInterface
     public function setOutputFlow(string $output): ShellCommandInterface;
 
     public function setErrorFlow(string $error): ShellCommandInterface;
+
+    /**
+     * @return $this
+     */
+    public function join(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
 }

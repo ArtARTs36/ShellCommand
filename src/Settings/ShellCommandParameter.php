@@ -10,17 +10,10 @@ use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
  */
 class ShellCommandParameter implements ShellSettingInterface
 {
-    /** @var string */
     private $string;
 
-    /** @var bool */
     private $quotes = false;
 
-    /**
-     * ShellCommandParameter constructor.
-     * @param string $string
-     * @param bool $quotes
-     */
     public function __construct(string $string, bool $quotes = false)
     {
         $this->string = $string;
@@ -42,5 +35,10 @@ class ShellCommandParameter implements ShellSettingInterface
     public static function is(string $raw): bool
     {
         return strpos($raw, '-', 0) !== 0;
+    }
+
+    public static function ampersands(): self
+    {
+        return new static('&&');
     }
 }

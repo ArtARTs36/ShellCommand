@@ -24,10 +24,6 @@ final class CommandRawParser
         $this->raw = $raw;
     }
 
-    /**
-     * @param string $raw
-     * @return ShellCommand
-     */
     public static function parse(string $raw): ShellCommand
     {
         return (new static($raw))->createCommand();
