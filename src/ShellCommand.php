@@ -10,7 +10,6 @@ use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
-use ArtARTs36\ShellCommand\Settings\ShellCommandSub;
 use ArtARTs36\ShellCommand\Support\HasSubCommands;
 use ArtARTs36\ShellCommand\Support\Unshift;
 
@@ -22,11 +21,6 @@ class ShellCommand implements ShellCommandInterface
     public const MOVE_DIR = 'cd';
 
     private $executor;
-
-    private $isExecuted = false;
-
-    /** @var string|null */
-    private $shellResult = null;
 
     /** @var ShellSettingInterface[] */
     private $settings = [];
