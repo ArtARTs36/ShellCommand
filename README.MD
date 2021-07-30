@@ -11,7 +11,7 @@ ShellCommand
 
 ### Installation:
 
-`composer require artarts36/shell-command`
+Run: `composer require artarts36/shell-command`
 
 ### Examples:
 
@@ -23,4 +23,18 @@ use ArtARTs36\ShellCommand\ShellCommand;
 $command = ShellCommand::make('git')->addArgument('push')->addOption('force');
 
 var_dump($command->__toString()); // git 'push' --force 2>&1
+```
+
+2. Execute Commands
+
+```php
+use ArtARTs36\ShellCommand\ShellCommand;
+
+$command = ShellCommand::make('git')->addArgument('pull');
+$result = $command->execute();
+
+var_dump($result->getCommandLine());
+var_dump($result->getCode());
+var_dump($result->getDate());
+var_dump($result->getCode());
 ```
