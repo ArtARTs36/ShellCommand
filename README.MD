@@ -15,13 +15,11 @@ ShellCommand
 
 ### Examples:
 
-1*. Simple
+1. Arguments && Options
 ```php
 use ArtARTs36\ShellCommand\ShellCommand;
 
-$command = (new ShellCommand('rm', false))
-    ->addCutOption('rf')
-    ->addParameter('/');
+$command = ShellCommand::make('git')->addParameter('push')->addOption('force');
 
-$command->execute();
+var_dump($command->__toString()); // git 'push' --force 2>&1
 ```
