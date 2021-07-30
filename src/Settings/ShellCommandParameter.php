@@ -12,12 +12,13 @@ class ShellCommandParameter implements ShellSettingInterface
 {
     private $string;
 
-    private $quotes = false;
-
-    public function __construct(string $string, bool $quotes = false)
+    /**
+     * ShellCommandParameter constructor.
+     * @param string $string
+     */
+    public function __construct(string $string)
     {
         $this->string = $string;
-        $this->quotes = $quotes;
     }
 
     /**
@@ -25,7 +26,7 @@ class ShellCommandParameter implements ShellSettingInterface
      */
     public function __toString(): string
     {
-        return $this->quotes ? ('"' . $this->string . '"') : $this->string;
+        return escapeshellarg($this->string);
     }
 
     /**
@@ -35,10 +36,5 @@ class ShellCommandParameter implements ShellSettingInterface
     public static function is(string $raw): bool
     {
         return strpos($raw, '-', 0) !== 0;
-    }
-
-    public static function ampersands(): self
-    {
-        return new static('&&');
     }
 }

@@ -7,6 +7,7 @@ use ArtARTs36\ShellCommand\Exceptions\ResultExceptionHandler;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
+use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -48,7 +49,7 @@ class ShellCommand implements ShellCommandInterface
 
     public static function make(string $executor = ''): ShellCommandInterface
     {
-        return (new static($executor));
+        return new static($executor);
     }
 
     /**
@@ -81,9 +82,9 @@ class ShellCommand implements ShellCommandInterface
      * Добавить параметр в командную строку
      * @return $this
      */
-    public function addParameter(string $value, bool $quotes = false): ShellCommandInterface
+    public function addParameter($value): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandParameter($value, $quotes));
+        $this->addSetting(new ShellCommandParameter($value));
 
         return $this;
     }
@@ -94,7 +95,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addAmpersands(): ShellCommandInterface
     {
-        $this->addSetting(ShellCommandParameter::ampersands());
+        $this->addSetting(new ShellCommandJoin());
 
         return $this;
     }

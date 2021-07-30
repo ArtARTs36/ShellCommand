@@ -16,17 +16,11 @@ class CommandRawParserTest extends TestCase
      */
     public function testParse(): void
     {
-        $expected = function (string $raw) {
-            return $raw . ' 2>&1';
-        };
-
-        //
-
         $raw = 'cd /var/web';
 
         $command = CommandRawParser::parse($raw);
 
-        self::assertEquals($expected($raw), $command->__toString());
+        self::assertEquals("'cd' '/var/web' 2>&1", $command->__toString());
 
         //
 
@@ -34,6 +28,6 @@ class CommandRawParserTest extends TestCase
 
         $command = CommandRawParser::parse($raw);
 
-        self::assertEquals($expected($raw), $command->__toString());
+        self::assertEquals("'php' 'artisan' 'queue:work' --delay=5 2>&1", $command->__toString());
     }
 }

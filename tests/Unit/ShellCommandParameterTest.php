@@ -16,13 +16,7 @@ class ShellCommandParameterTest extends TestCase
 
         $instance = new ShellCommandParameter($parameter);
 
-        self::assertEquals($parameter, $instance->__toString());
-
-        //
-
-        $instance = new ShellCommandParameter($parameter, true);
-
-        self::assertEquals('"'. $parameter . '"', $instance->__toString());
+        self::assertEquals("'$parameter'", $instance->__toString());
     }
 
     /**
