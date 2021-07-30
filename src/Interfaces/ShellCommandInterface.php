@@ -2,38 +2,29 @@
 
 namespace ArtARTs36\ShellCommand\Interfaces;
 
-/**
- * Interface ShellCommandInterface
- * @package ArtARTs36\ShellCommand\Interfaces
- */
+use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
+use ArtARTs36\ShellCommand\Result\CommandResult;
+
 interface ShellCommandInterface
 {
     /**
-     * @param string $dir
-     * @param string $executor
-     * @return ShellCommandInterface
-     * @deprecated
-     */
-    public static function getInstanceWithMoveDir(string $dir, string $executor);
-
-    /**
      * @param string $dir - path to navigate to folder
      * @param string $executor - executor alias or path
+     * @return ShellCommandInterface
      */
     public static function withNavigateToDir(string $dir, string $executor);
 
     public static function make(string $executor = ''): ShellCommandInterface;
 
     /**
-     * @return $this
+     * Execute the shell script
      */
-    public function execute(): self;
+    public function execute(): CommandResult;
 
     /**
-     * @param $value
      * @return $this
      */
-    public function addParameter($value): self;
+    public function addParameter(string $value): self;
 
     /**
      * @return $this
@@ -41,29 +32,25 @@ interface ShellCommandInterface
     public function addAmpersands(): self;
 
     /**
-     * @param array $values
+     * @param array<string> $values
      * @return $this
      */
     public function addParameters(array $values): self;
 
     /**
-     * @param $option
      * @return $this
      */
-    public function addOption($option): self;
+    public function addOption(string $option): self;
 
     /**
-     * @param $option
      * @return $this
      */
-    public function addCutOption($option): self;
+    public function addCutOption(string $option): self;
 
     /**
-     * @param string $option
-     * @param mixed $value
      * @return $this
      */
-    public function addCutOptionWithValue($option, $value): self;
+    public function addCutOptionWithValue(string $option, string $value): self;
 
     /**
      * @param string $option
@@ -71,16 +58,6 @@ interface ShellCommandInterface
      * @return $this
      */
     public function addOptionWithValue(string $option, string $value): self;
-
-    /**
-     * @return mixed
-     */
-    public function getShellResult();
-
-    /**
-     * @return bool
-     */
-    public function isExecuted(): bool;
 
     /**
      * @return string
@@ -106,4 +83,14 @@ interface ShellCommandInterface
     public function setOutputFlow(string $output): ShellCommandInterface;
 
     public function setErrorFlow(string $error): ShellCommandInterface;
+
+    /**
+     * @return $this
+     */
+    public function join(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
+
+    /**
+     * @throws CommandFailed
+     */
+    public function executeOrFail(): CommandResult;
 }

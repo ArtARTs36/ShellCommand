@@ -12,18 +12,6 @@ use PHPUnit\Framework\TestCase;
 class ShellCommandTest extends TestCase
 {
     /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::__construct
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::isExecuted
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::__toString
-     */
-    public function testCreateInstance(): void
-    {
-        $instance = new ShellCommand('cd');
-
-        self::assertFalse($instance->isExecuted());
-    }
-
-    /**
      * @covers \ArtARTs36\ShellCommand\ShellCommand::addAmpersands
      */
     public function testAddAmpersands(): void
@@ -112,22 +100,6 @@ class ShellCommandTest extends TestCase
             ->addOptionWithValue($option, $value);
 
         self::assertEquals("{$executor} --{$option}={$value} 2>&1", $command->__toString());
-    }
-
-    /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::getInstanceWithMoveDir
-     * @todo Will Be Removed
-     */
-    public function testGetInstanceWithMoveDir(): void
-    {
-        $this->expectDeprecation();
-
-        $dir = __DIR__;
-        $executor = 'git';
-
-        $command = ShellCommand::getInstanceWithMoveDir($dir, $executor);
-
-        self::assertEquals("cd {$dir} && $executor 2>&1", $command->__toString());
     }
 
     /**

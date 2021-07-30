@@ -3,47 +3,27 @@
 namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
+use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
 
-/**
- * Class CommandRawParser
- * @package ArtARTs36\ShellCommand
- */
 final class CommandRawParser
 {
-    /** @var string */
-    private $raw;
-
-    /**
-     * CommandRawParser constructor.
-     * @param string $raw
-     */
-    public function __construct(string $raw)
-    {
-        $this->raw = $raw;
-    }
-
-    /**
-     * @param string $raw
-     * @return ShellCommand
-     */
     public static function parse(string $raw): ShellCommand
     {
-        return (new static($raw))->createCommand();
+        return (new self())->createCommand($raw);
     }
 
-    /**
-     * @return ShellCommand
-     */
-    public function createCommand(): ShellCommand
+    public function createCommand(string $raw): ShellCommand
     {
-        $params = explode(' ', $this->raw);
+        $params = explode(' ', $raw);
 
-        $command = new ShellCommand('');
+        $command = ShellCommand::make();
 
         foreach ($params as $param) {
-            if (ShellCommandParameter::is($param)) {
+            if (ShellCommandJoin::is($param)) {
+                $command->addAmpersands();
+            } elseif (ShellCommandParameter::is($param)) {
                 $command->addParameter($param);
             } elseif (ShellCommandOption::isWithValue($param)) {
                 $command->addOptionWithValue(...ShellCommandOption::explodeAttributesFromRaw($param));

@@ -2,65 +2,42 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
+use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
+use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
+use ArtARTs36\ShellCommand\Support\HasSubCommands;
 use ArtARTs36\ShellCommand\Support\Unshift;
 
 class ShellCommand implements ShellCommandInterface
 {
     use Unshift;
+    use HasSubCommands;
 
     public const NAVIGATE_TO_DIR = 'cd';
-    public const MOVE_DIR = self::NAVIGATE_TO_DIR;
 
-    /** @var string */
     private $executor;
-
-    /** @var bool */
-    private $isExecuted = false;
-
-    /** @var string */
-    private $shellResult = null;
 
     /** @var ShellSettingInterface[] */
     private $settings = [];
 
-    /** @var bool */
     private $inBackground = false;
 
     private $outputFlow;
 
     private $errorFlow;
 
-    /**
-     * ShellCommand constructor.
-     * @param string $executor
-     */
-    public function __construct(string $executor)
+    private $exceptions;
+
+    public function __construct(string $executor, ?ResultExceptionTrigger $exceptions = null)
     {
         $this->executor = $executor;
-    }
-
-    /**
-     * @param string $dir
-     * @param string $executor
-     * @deprecated
-     * @return ShellCommand
-     */
-    public static function getInstanceWithMoveDir(string $dir, string $executor): ShellCommand
-    {
-        trigger_error(
-            'Method ShellCommandInterface::getInstanceWithMoveDir is deprecated.' .
-            'Will be removed in v. 2.0' .
-            'Should use ShellCommandInterface::withNavigateToDir',
-            E_USER_DEPRECATED
-        );
-
-        return static::withNavigateToDir($dir, $executor);
+        $this->exceptions = $exceptions;
     }
 
     public static function withNavigateToDir(string $dir, string $executor): ShellCommand
@@ -78,25 +55,35 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Выполнить программу
-     *
-     * @return self
      */
-    public function execute(): ShellCommandInterface
+    public function execute(): CommandResult
     {
-        $this->isExecuted = true;
+        $line = $this->prepareShellCommand();
+        $result = null;
+        $code = null;
 
-        $this->shellResult = shell_exec($this->prepareShellCommand());
+        exec($line, $result, $code);
 
-        return $this;
+        return new CommandResult($line, shell_exec($line), new \DateTime(), $code);
+    }
+
+    /**
+     * @throws CommandFailed
+     */
+    public function executeOrFail(): CommandResult
+    {
+        $result = $this->execute();
+
+        $this->handleException($result);
+
+        return $result;
     }
 
     /**
      * Добавить параметр в командную строку
-     *
-     * @param mixed $value
      * @return $this
      */
-    public function addParameter($value): ShellCommandInterface
+    public function addParameter(string $value): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandParameter($value));
 
@@ -116,8 +103,6 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Добавить параметры в командную строку
-     *
-     * @param array $values
      * @return $this
      */
     public function addParameters(array $values): ShellCommandInterface
@@ -132,10 +117,9 @@ class ShellCommand implements ShellCommandInterface
     /**
      * Добавить опцию в командную строку
      *
-     * @param mixed $option
      * @return $this
      */
-    public function addOption($option): ShellCommandInterface
+    public function addOption(string $option): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandOption($option));
 
@@ -144,23 +128,16 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Добавить опцию в командную строку
-     *
-     * @param string $option
      * @return $this
      */
-    public function addCutOption($option): ShellCommandInterface
+    public function addCutOption(string $option): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandCutOption($option));
 
         return $this;
     }
 
-    /**
-     * @param string $option
-     * @param mixed $value
-     * @return ShellCommand
-     */
-    public function addCutOptionWithValue($option, $value): ShellCommandInterface
+    public function addCutOptionWithValue(string $option, string $value): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandCutOption($option, $value));
 
@@ -169,10 +146,6 @@ class ShellCommand implements ShellCommandInterface
 
     /**
      * Добавить опцию со значением
-     *
-     * @param string $option
-     * @param string $value
-     * @return $this
      */
     public function addOptionWithValue(string $option, string $value): ShellCommandInterface
     {
@@ -181,11 +154,6 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
-    /**
-     * @param bool $condition
-     * @param \Closure $value
-     * @return ShellCommandInterface
-     */
     public function when(bool $condition, \Closure $value): ShellCommandInterface
     {
         if ($condition === true) {
@@ -195,25 +163,6 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
-    /**
-     * Получить результат выполнения программы
-     *
-     * @return string|null
-     */
-    public function getShellResult()
-    {
-        if ($this->shellResult === null && $this->isExecuted === false) {
-            $this->execute();
-        }
-
-        return $this->shellResult;
-    }
-
-    /**
-     * Подготовить шелл-команду
-     *
-     * @return string
-     */
     private function prepareShellCommand(): string
     {
         $cmd = implode(' ', array_merge([$this->getExecutor()], array_map('strval', $this->settings)));
@@ -224,7 +173,15 @@ class ShellCommand implements ShellCommandInterface
             return '';
         }
 
-        return $this->addFlowIntoCommand($cmd);
+        $cmd = $this->addFlowIntoCommand($cmd);
+
+        $joined = $this->buildJoinCommands();
+
+        if ($joined !== '') {
+            $cmd .= $joined;
+        }
+
+        return $cmd;
     }
 
     public function getErrorFlow(): string
@@ -253,14 +210,6 @@ class ShellCommand implements ShellCommandInterface
         $this->errorFlow = $error;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isExecuted(): bool
-    {
-        return $this->isExecuted;
     }
 
     /**
@@ -319,5 +268,12 @@ class ShellCommand implements ShellCommandInterface
         }
 
         return ($real = realpath($this->executor)) ? $real : $this->executor;
+    }
+
+    private function handleException(CommandResult $result): void
+    {
+        $trigger = $this->exceptions ?? new ResultExceptionTrigger();
+
+        $trigger->handle($result);
     }
 }
