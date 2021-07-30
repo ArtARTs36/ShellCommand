@@ -3,7 +3,7 @@
 namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
-use ArtARTs36\ShellCommand\Exceptions\ResultExceptionHandler;
+use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
@@ -34,10 +34,10 @@ class ShellCommand implements ShellCommandInterface
 
     private $exceptions;
 
-    public function __construct(string $executor, ?ResultExceptionHandler $exceptions = null)
+    public function __construct(string $executor, ?ResultExceptionTrigger $exceptions = null)
     {
         $this->executor = $executor;
-        $this->exceptions = $exceptions ?? new ResultExceptionHandler();
+        $this->exceptions = $exceptions;
     }
 
     public static function withNavigateToDir(string $dir, string $executor): ShellCommand
@@ -74,7 +74,7 @@ class ShellCommand implements ShellCommandInterface
     {
         $result = $this->execute();
 
-        $this->exceptions->handle($result);
+        $this->handleException($result);
 
         return $result;
     }
@@ -268,5 +268,12 @@ class ShellCommand implements ShellCommandInterface
         }
 
         return ($real = realpath($this->executor)) ? $real : $this->executor;
+    }
+
+    private function handleException(CommandResult $result): void
+    {
+        $trigger = $this->exceptions ?? new ResultExceptionTrigger();
+
+        $trigger->handle($result);
     }
 }

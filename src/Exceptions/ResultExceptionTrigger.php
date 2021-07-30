@@ -5,7 +5,7 @@ namespace ArtARTs36\ShellCommand\Exceptions;
 use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Result\ResultCode;
 
-class ResultExceptionHandler
+class ResultExceptionTrigger
 {
     /** @var <string, class-string<CommandFailed> */
     protected $map = [
