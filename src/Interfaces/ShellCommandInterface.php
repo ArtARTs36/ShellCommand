@@ -24,7 +24,7 @@ interface ShellCommandInterface
     /**
      * @return $this
      */
-    public function addParameter(string $value): self;
+    public function addArgument(string $value): self;
 
     /**
      * @return $this

@@ -16,10 +16,11 @@ ShellCommand
 ### Examples:
 
 1. Arguments && Options
+
 ```php
 use ArtARTs36\ShellCommand\ShellCommand;
 
-$command = ShellCommand::make('git')->addParameter('push')->addOption('force');
+$command = ShellCommand::make('git')->addArgument('push')->addOption('force');
 
 var_dump($command->__toString()); // git 'push' --force 2>&1
 ```

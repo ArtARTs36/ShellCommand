@@ -5,7 +5,7 @@ namespace ArtARTs36\ShellCommand;
 use ArtARTs36\ShellCommand\Settings\CutOption;
 use ArtARTs36\ShellCommand\Settings\Join;
 use ArtARTs36\ShellCommand\Settings\Option;
-use ArtARTs36\ShellCommand\Settings\Parameter;
+use ArtARTs36\ShellCommand\Settings\Argument;
 
 final class CommandRawParser
 {
@@ -23,8 +23,8 @@ final class CommandRawParser
         foreach ($params as $param) {
             if (Join::is($param)) {
                 $command->addAmpersands();
-            } elseif (Parameter::is($param)) {
-                $command->addParameter($param);
+            } elseif (Argument::is($param)) {
+                $command->addArgument($param);
             } elseif (Option::isWithValue($param)) {
                 $command->addOptionWithValue(...Option::explodeAttributesFromRaw($param));
             } elseif (Option::is($param)) {

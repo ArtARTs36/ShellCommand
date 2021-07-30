@@ -4,7 +4,7 @@ namespace ArtARTs36\ShellCommand\Support;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Settings\Join;
-use ArtARTs36\ShellCommand\Settings\Parameter;
+use ArtARTs36\ShellCommand\Settings\Argument;
 
 trait Unshift
 {

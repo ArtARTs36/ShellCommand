@@ -23,7 +23,7 @@ class ShellCommandTest extends TestCase
     }
 
     /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::addParameter
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::addArgument
      * @covers \ArtARTs36\ShellCommand\ShellCommand::addOption
      * @covers \ArtARTs36\ShellCommand\ShellCommand::addCutOption
      */
@@ -33,7 +33,7 @@ class ShellCommandTest extends TestCase
         $parameter = 'qwerty';
 
         $command = (new ShellCommand($executor))
-            ->addParameter($parameter);
+            ->addArgument($parameter);
 
         $response = $command->__toString();
 
@@ -122,7 +122,7 @@ class ShellCommandTest extends TestCase
     {
         $command = (new ShellCommand('git'))
             ->when(false, function (ShellCommand $command) {
-                $command->addParameter('pull');
+                $command->addArgument('pull');
             });
 
         self::assertEquals('git 2>&1', $command->__toString());
@@ -130,7 +130,7 @@ class ShellCommandTest extends TestCase
         //
 
         $command->when(true, function (ShellCommand $command) {
-            $command->addParameter('pull');
+            $command->addArgument('pull');
         });
 
         self::assertEquals("git 'pull' 2>&1", $command->__toString());
@@ -142,8 +142,8 @@ class ShellCommandTest extends TestCase
     public function testUnshift(): void
     {
         $cmd = $this->makeCommand()
-            ->addParameter('git')
-            ->addParameter('pull');
+            ->addArgument('git')
+            ->addArgument('pull');
 
         self::assertEquals("'git' 'pull' 2>&1", $cmd->__toString());
 
@@ -151,8 +151,8 @@ class ShellCommandTest extends TestCase
 
         $cmd->unshift(function (ShellCommand $command) {
             $command
-                ->addParameter('cd')
-                ->addParameter('/var/web')
+                ->addArgument('cd')
+                ->addArgument('/var/web')
                 ->addAmpersands();
         });
 
@@ -164,16 +164,16 @@ class ShellCommandTest extends TestCase
 
         $cmd->unshift(function (ShellCommand $command) {
             $command
-                ->addParameter('less')
-                ->addParameter('.env');
+                ->addArgument('less')
+                ->addArgument('.env');
         }, true);
 
         self::assertEquals("'less' '.env' 2>&1", $cmd->__toString());
 
         $cmd->unshift(function (ShellCommand $command) {
             $command
-                ->addParameter('cd')
-                ->addParameter('/var/');
+                ->addArgument('cd')
+                ->addArgument('/var/');
         }, true);
 
         self::assertEquals("'cd' '/var/' && 'less' '.env' 2>&1", $cmd->__toString());
@@ -185,7 +185,7 @@ class ShellCommandTest extends TestCase
     public function testInBackground(): void
     {
         $cmd = new ShellCommand('pg_dump');
-        $cmd->addParameter('database');
+        $cmd->addArgument('database');
         $cmd->setOutputFlow('dump.sql');
         $cmd->inBackground();
 

@@ -10,7 +10,7 @@ use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Settings\Join;
 use ArtARTs36\ShellCommand\Settings\CutOption;
 use ArtARTs36\ShellCommand\Settings\Option;
-use ArtARTs36\ShellCommand\Settings\Parameter;
+use ArtARTs36\ShellCommand\Settings\Argument;
 use ArtARTs36\ShellCommand\Support\HasSubCommands;
 use ArtARTs36\ShellCommand\Support\Unshift;
 
@@ -43,9 +43,9 @@ class ShellCommand implements ShellCommandInterface
     public static function withNavigateToDir(string $dir, string $executor): ShellCommand
     {
         return (new static(static::NAVIGATE_TO_DIR))
-            ->addParameter(realpath($dir))
+            ->addArgument(realpath($dir))
             ->addAmpersands()
-            ->addParameter($executor);
+            ->addArgument($executor);
     }
 
     public static function make(string $executor = ''): ShellCommandInterface
@@ -83,9 +83,9 @@ class ShellCommand implements ShellCommandInterface
      * Добавить параметр в командную строку
      * @return $this
      */
-    public function addParameter(string $value): ShellCommandInterface
+    public function addArgument(string $value): ShellCommandInterface
     {
-        $this->addSetting(new Parameter($value));
+        $this->addSetting(new Argument($value));
 
         return $this;
     }
@@ -108,7 +108,7 @@ class ShellCommand implements ShellCommandInterface
     public function addParameters(array $values): ShellCommandInterface
     {
         foreach ($values as $value) {
-            $this->addSetting(new Parameter($value));
+            $this->addSetting(new Argument($value));
         }
 
         return $this;
