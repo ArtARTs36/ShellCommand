@@ -49,7 +49,7 @@ class ShellCommandTest extends TestCase
 
         $response = $command->__toString();
 
-        self::assertEquals("{$executor} {$parameter} 2>&1", $response);
+        self::assertEquals("{$executor} '{$parameter}' 2>&1", $response);
 
         //
 
@@ -57,7 +57,7 @@ class ShellCommandTest extends TestCase
 
         $command->addOption('r');
 
-        self::assertEquals("{$executor} {$parameter} --{$option} 2>&1", $command->__toString());
+        self::assertEquals("{$executor} '{$parameter}' --{$option} 2>&1", $command->__toString());
 
         //
 
@@ -65,7 +65,7 @@ class ShellCommandTest extends TestCase
 
         $command->addCutOption($cutOption);
 
-        self::assertEquals("{$executor} {$parameter} --{$option} -{$cutOption} 2>&1", $command->__toString());
+        self::assertEquals("{$executor} '{$parameter}' --{$option} -{$cutOption} 2>&1", $command->__toString());
 
         //
 
@@ -74,7 +74,7 @@ class ShellCommandTest extends TestCase
         $command->addCutOptionWithValue($cutOption, $value);
 
         self::assertEquals(
-            "{$executor} {$parameter} --{$option} -{$cutOption} -{$cutOption}={$value} 2>&1",
+            "{$executor} '{$parameter}' --{$option} -{$cutOption} -{$cutOption}={$value} 2>&1",
             $command->__toString()
         );
     }
@@ -91,7 +91,7 @@ class ShellCommandTest extends TestCase
             'f',
         ];
 
-        $expected = implode(' ', array_merge([$executor], $parameters, ['2>&1']));
+        $expected = "cp 'r' 'f' 2>&1";
 
         $command = (new ShellCommand($executor))
             ->addParameters($parameters);
@@ -140,7 +140,7 @@ class ShellCommandTest extends TestCase
 
         $command = ShellCommand::withNavigateToDir($dir, $executor);
 
-        self::assertEquals("cd {$dir} && $executor 2>&1", $command->__toString());
+        self::assertEquals("cd '{$dir}' && '$executor' 2>&1", $command->__toString());
     }
 
     /**
@@ -161,7 +161,7 @@ class ShellCommandTest extends TestCase
             $command->addParameter('pull');
         });
 
-        self::assertEquals('git pull 2>&1', $command->__toString());
+        self::assertEquals("git 'pull' 2>&1", $command->__toString());
     }
 
     /**
@@ -173,7 +173,7 @@ class ShellCommandTest extends TestCase
             ->addParameter('git')
             ->addParameter('pull');
 
-        self::assertEquals('git pull 2>&1', $cmd->__toString());
+        self::assertEquals("'git' 'pull' 2>&1", $cmd->__toString());
 
         //
 
@@ -184,7 +184,7 @@ class ShellCommandTest extends TestCase
                 ->addAmpersands();
         });
 
-        self::assertEquals('cd /var/web && git pull 2>&1', $cmd->__toString());
+        self::assertEquals("'cd' '/var/web' && 'git' 'pull' 2>&1", $cmd->__toString());
 
         //
 
@@ -196,7 +196,7 @@ class ShellCommandTest extends TestCase
                 ->addParameter('.env');
         }, true);
 
-        self::assertEquals('less .env 2>&1', $cmd->__toString());
+        self::assertEquals("'less' '.env' 2>&1", $cmd->__toString());
 
         $cmd->unshift(function (ShellCommand $command) {
             $command
@@ -204,7 +204,7 @@ class ShellCommandTest extends TestCase
                 ->addParameter('/var/');
         }, true);
 
-        self::assertEquals('cd /var/ && less .env 2>&1', $cmd->__toString());
+        self::assertEquals("'cd' '/var/' && 'less' '.env' 2>&1", $cmd->__toString());
     }
 
     /**
@@ -217,7 +217,7 @@ class ShellCommandTest extends TestCase
         $cmd->setOutputFlow('dump.sql');
         $cmd->inBackground();
 
-        self::assertEquals('pg_dump database 1>dump.sql 2>/dev/null &', $cmd->__toString());
+        self::assertEquals("pg_dump 'database' 1>dump.sql 2>/dev/null &", $cmd->__toString());
     }
 
     /**

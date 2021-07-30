@@ -31,10 +31,9 @@ interface ShellCommandInterface
 
     /**
      * @param $value
-     * @param bool $quotes
      * @return $this
      */
-    public function addParameter($value, bool $quotes = false): self;
+    public function addParameter($value): self;
 
     /**
      * @return $this

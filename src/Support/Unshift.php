@@ -3,6 +3,7 @@
 namespace ArtARTs36\ShellCommand\Support;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
+use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
 
 trait Unshift
@@ -23,7 +24,7 @@ trait Unshift
         $closure($this);
 
         if ($and === true && !empty($this->settings)) {
-            $this->unshift[] = new ShellCommandParameter('&&');
+            $this->unshift[] = new ShellCommandJoin();
         }
 
         $this->settings = array_merge($this->unshift, $this->settings);

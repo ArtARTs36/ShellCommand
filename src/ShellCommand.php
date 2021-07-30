@@ -4,6 +4,7 @@ namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
+use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -64,7 +65,8 @@ class ShellCommand implements ShellCommandInterface
 
     public static function withNavigateToDir(string $dir, string $executor): ShellCommand
     {
-        return (new static(static::NAVIGATE_TO_DIR . ' ' . realpath($dir)))
+        return (new static(static::NAVIGATE_TO_DIR))
+            ->addParameter(realpath($dir))
             ->addAmpersands()
             ->addParameter($executor);
     }
@@ -92,12 +94,11 @@ class ShellCommand implements ShellCommandInterface
      * Добавить параметр в командную строку
      *
      * @param mixed $value
-     * @param bool $quotes
      * @return $this
      */
-    public function addParameter($value, bool $quotes = false): ShellCommandInterface
+    public function addParameter($value): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandParameter($value, $quotes));
+        $this->addSetting(new ShellCommandParameter($value));
 
         return $this;
     }
@@ -108,7 +109,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addAmpersands(): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandParameter('&&'));
+        $this->addSetting(new ShellCommandJoin());
 
         return $this;
     }
