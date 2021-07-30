@@ -4,7 +4,7 @@ namespace ArtARTs36\ShellCommand\Settings;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 
-class ShellCommandOption implements ShellSettingInterface
+class Option implements ShellSettingInterface
 {
     protected $option;
 

@@ -2,7 +2,7 @@
 
 namespace ArtARTs36\ShellCommand\Settings;
 
-class ShellCommandCutOption extends ShellCommandOption
+class CutOption extends Option
 {
     public function __toString(): string
     {

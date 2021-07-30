@@ -8,7 +8,7 @@ use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
  * Class ShellCommandParameter
  * @package ArtARTs36\ShellCommand\Settings
  */
-class ShellCommandParameter implements ShellSettingInterface
+class Parameter implements ShellSettingInterface
 {
     private $string;
 

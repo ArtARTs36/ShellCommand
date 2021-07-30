@@ -3,9 +3,9 @@
 namespace ArtARTs36\ShellCommand\Support;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
-use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
-use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
-use ArtARTs36\ShellCommand\Settings\ShellCommandSub;
+use ArtARTs36\ShellCommand\Settings\Join;
+use ArtARTs36\ShellCommand\Settings\Parameter;
+use ArtARTs36\ShellCommand\Settings\CommandSub;
 
 trait HasSubCommands
 {
@@ -16,9 +16,9 @@ trait HasSubCommands
     {
         if ($selfScope) {
             $this->addAmpersands();
-            $this->addSetting(new ShellCommandSub($command));
+            $this->addSetting(new CommandSub($command));
         } else {
-            $this->join[] = new ShellCommandJoin();
+            $this->join[] = new Join();
             $this->join[] = $command;
         }
 

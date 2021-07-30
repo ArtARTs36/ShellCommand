@@ -4,7 +4,7 @@ namespace ArtARTs36\ShellCommand\Settings;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 
-class ShellCommandJoin implements ShellSettingInterface
+class Join implements ShellSettingInterface
 {
     public function __toString(): string
     {

@@ -5,7 +5,7 @@ namespace ArtARTs36\ShellCommand\Settings;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 
-class ShellCommandSub implements ShellSettingInterface
+class CommandSub implements ShellSettingInterface
 {
     private $command;
 

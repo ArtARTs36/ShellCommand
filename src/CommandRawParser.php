@@ -2,10 +2,10 @@
 
 namespace ArtARTs36\ShellCommand;
 
-use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
-use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
-use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
-use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
+use ArtARTs36\ShellCommand\Settings\CutOption;
+use ArtARTs36\ShellCommand\Settings\Join;
+use ArtARTs36\ShellCommand\Settings\Option;
+use ArtARTs36\ShellCommand\Settings\Parameter;
 
 final class CommandRawParser
 {
@@ -21,17 +21,17 @@ final class CommandRawParser
         $command = ShellCommand::make();
 
         foreach ($params as $param) {
-            if (ShellCommandJoin::is($param)) {
+            if (Join::is($param)) {
                 $command->addAmpersands();
-            } elseif (ShellCommandParameter::is($param)) {
+            } elseif (Parameter::is($param)) {
                 $command->addParameter($param);
-            } elseif (ShellCommandOption::isWithValue($param)) {
-                $command->addOptionWithValue(...ShellCommandOption::explodeAttributesFromRaw($param));
-            } elseif (ShellCommandOption::is($param)) {
+            } elseif (Option::isWithValue($param)) {
+                $command->addOptionWithValue(...Option::explodeAttributesFromRaw($param));
+            } elseif (Option::is($param)) {
                 $command->addOption($param);
-            } elseif (ShellCommandCutOption::isWithValue($param)) {
-                $command->addCutOptionWithValue(...ShellCommandCutOption::explodeAttributesFromRaw($param));
-            } elseif (ShellCommandCutOption::is($param)) {
+            } elseif (CutOption::isWithValue($param)) {
+                $command->addCutOptionWithValue(...CutOption::explodeAttributesFromRaw($param));
+            } elseif (CutOption::is($param)) {
                 $command->addCutOption($param);
             }
         }

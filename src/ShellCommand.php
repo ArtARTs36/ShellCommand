@@ -7,10 +7,10 @@ use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
-use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
-use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
-use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
-use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
+use ArtARTs36\ShellCommand\Settings\Join;
+use ArtARTs36\ShellCommand\Settings\CutOption;
+use ArtARTs36\ShellCommand\Settings\Option;
+use ArtARTs36\ShellCommand\Settings\Parameter;
 use ArtARTs36\ShellCommand\Support\HasSubCommands;
 use ArtARTs36\ShellCommand\Support\Unshift;
 
@@ -85,7 +85,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addParameter(string $value): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandParameter($value));
+        $this->addSetting(new Parameter($value));
 
         return $this;
     }
@@ -96,7 +96,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addAmpersands(): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandJoin());
+        $this->addSetting(new Join());
 
         return $this;
     }
@@ -108,7 +108,7 @@ class ShellCommand implements ShellCommandInterface
     public function addParameters(array $values): ShellCommandInterface
     {
         foreach ($values as $value) {
-            $this->addSetting(new ShellCommandParameter($value));
+            $this->addSetting(new Parameter($value));
         }
 
         return $this;
@@ -121,7 +121,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addOption(string $option): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandOption($option));
+        $this->addSetting(new Option($option));
 
         return $this;
     }
@@ -132,14 +132,14 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addCutOption(string $option): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandCutOption($option));
+        $this->addSetting(new CutOption($option));
 
         return $this;
     }
 
     public function addCutOptionWithValue(string $option, string $value): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandCutOption($option, $value));
+        $this->addSetting(new CutOption($option, $value));
 
         return $this;
     }
@@ -149,7 +149,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function addOptionWithValue(string $option, string $value): ShellCommandInterface
     {
-        $this->addSetting(new ShellCommandOption($option, $value));
+        $this->addSetting(new Option($option, $value));
 
         return $this;
     }
