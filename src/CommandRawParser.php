@@ -17,7 +17,7 @@ final class CommandRawParser
     {
         $params = explode(' ', $raw);
 
-        $command = new ShellCommand('');
+        $command = ShellCommand::make();
 
         foreach ($params as $param) {
             if (ShellCommandParameter::is($param)) {
