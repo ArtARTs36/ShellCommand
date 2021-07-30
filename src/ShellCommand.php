@@ -42,7 +42,8 @@ class ShellCommand implements ShellCommandInterface
 
     public static function withNavigateToDir(string $dir, string $executor): ShellCommand
     {
-        return (new static(static::NAVIGATE_TO_DIR . ' ' . realpath($dir)))
+        return (new static(static::NAVIGATE_TO_DIR))
+            ->addParameter(realpath($dir))
             ->addAmpersands()
             ->addParameter($executor);
     }
@@ -82,7 +83,7 @@ class ShellCommand implements ShellCommandInterface
      * Добавить параметр в командную строку
      * @return $this
      */
-    public function addParameter($value): ShellCommandInterface
+    public function addParameter(string $value): ShellCommandInterface
     {
         $this->addSetting(new ShellCommandParameter($value));
 

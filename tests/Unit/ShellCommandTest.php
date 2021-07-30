@@ -112,7 +112,7 @@ class ShellCommandTest extends TestCase
 
         $command = ShellCommand::withNavigateToDir($dir, $executor);
 
-        self::assertEquals("cd {$dir} && $executor 2>&1", $command->__toString());
+        self::assertEquals("cd '{$dir}' && '$executor' 2>&1", $command->__toString());
     }
 
     /**

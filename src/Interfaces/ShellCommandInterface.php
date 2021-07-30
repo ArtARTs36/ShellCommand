@@ -21,10 +21,9 @@ interface ShellCommandInterface
     public function execute(): CommandResult;
 
     /**
-     * @param bool $quotes - is wrap to quotes
      * @return $this
      */
-    public function addParameter(string $value, bool $quotes = false): self;
+    public function addParameter(string $value): self;
 
     /**
      * @return $this

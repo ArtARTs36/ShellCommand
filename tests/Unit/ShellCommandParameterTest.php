@@ -28,12 +28,4 @@ class ShellCommandParameterTest extends TestCase
         self::assertFalse(ShellCommandParameter::is('-key'));
         self::assertFalse(ShellCommandParameter::is('--key'));
     }
-
-    /**
-     * @covers \ArtARTs36\ShellCommand\Settings\ShellCommandParameter::ampersands
-     */
-    public function testAmpersands(): void
-    {
-        self::assertEquals('&&', ShellCommandParameter::ampersands());
-    }
 }

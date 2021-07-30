@@ -3,6 +3,7 @@
 namespace ArtARTs36\ShellCommand\Support;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
+use ArtARTs36\ShellCommand\Settings\ShellCommandJoin;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
 use ArtARTs36\ShellCommand\Settings\ShellCommandSub;
 
@@ -17,7 +18,7 @@ trait HasSubCommands
             $this->addAmpersands();
             $this->addSetting(new ShellCommandSub($command));
         } else {
-            $this->join[] = ShellCommandParameter::ampersands();
+            $this->join[] = new ShellCommandJoin();
             $this->join[] = $command;
         }
 
