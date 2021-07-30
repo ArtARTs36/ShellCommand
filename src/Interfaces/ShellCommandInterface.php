@@ -2,6 +2,7 @@
 
 namespace ArtARTs36\ShellCommand\Interfaces;
 
+use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use ArtARTs36\ShellCommand\Result\CommandResult;
 
 interface ShellCommandInterface
@@ -87,4 +88,9 @@ interface ShellCommandInterface
      * @return $this
      */
     public function join(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
+
+    /**
+     * @throws CommandFailed
+     */
+    public function executeOrFail(): CommandResult;
 }
