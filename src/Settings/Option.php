@@ -23,7 +23,7 @@ class Option implements ShellSettingInterface
 
     public static function is(string $raw): bool
     {
-        return is_int(strpos($raw, '--'));
+        return mb_strpos($raw, '--') === 0;
     }
 
     public static function isWithValue(string $raw): bool
