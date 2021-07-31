@@ -35,7 +35,7 @@ interface ShellCommandInterface
      * @param array<string> $values
      * @return $this
      */
-    public function addParameters(array $values): self;
+    public function addArguments(array $values): self;
 
     /**
      * @return $this

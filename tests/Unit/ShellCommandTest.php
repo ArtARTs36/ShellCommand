@@ -68,7 +68,7 @@ class ShellCommandTest extends TestCase
     }
 
     /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::addParameters
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::addArguments
      */
     public function testAddParameters(): void
     {
@@ -82,7 +82,7 @@ class ShellCommandTest extends TestCase
         $expected = "cp 'r' 'f' 2>&1";
 
         $command = (new ShellCommand($executor))
-            ->addParameters($parameters);
+            ->addArguments($parameters);
 
         self::assertEquals($expected, $command->__toString());
     }

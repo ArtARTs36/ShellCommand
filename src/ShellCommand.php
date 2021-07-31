@@ -105,7 +105,7 @@ class ShellCommand implements ShellCommandInterface
      * Добавить параметры в командную строку
      * @return $this
      */
-    public function addParameters(array $values): ShellCommandInterface
+    public function addArguments(array $values): ShellCommandInterface
     {
         foreach ($values as $value) {
             $this->addSetting(new Argument($value));
