@@ -93,4 +93,9 @@ interface ShellCommandInterface
      * @throws CommandFailed
      */
     public function executeOrFail(): CommandResult;
+
+    /**
+     * @return array<ShellSettingInterface>
+     */
+    public function getSettings(): array;
 }

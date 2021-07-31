@@ -2,15 +2,12 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Concerns\HasSettings;
 use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
-use ArtARTs36\ShellCommand\Settings\Join;
-use ArtARTs36\ShellCommand\Settings\CutOption;
-use ArtARTs36\ShellCommand\Settings\Option;
-use ArtARTs36\ShellCommand\Settings\Argument;
 use ArtARTs36\ShellCommand\Support\HasSubCommands;
 use ArtARTs36\ShellCommand\Support\Unshift;
 
@@ -18,13 +15,11 @@ class ShellCommand implements ShellCommandInterface
 {
     use Unshift;
     use HasSubCommands;
+    use HasSettings;
 
     public const NAVIGATE_TO_DIR = 'cd';
 
     private $executor;
-
-    /** @var ShellSettingInterface[] */
-    private $settings = [];
 
     private $inBackground = false;
 
@@ -79,81 +74,6 @@ class ShellCommand implements ShellCommandInterface
         return $result;
     }
 
-    /**
-     * Добавить параметр в командную строку
-     * @return $this
-     */
-    public function addArgument(string $value): ShellCommandInterface
-    {
-        $this->addSetting(new Argument($value));
-
-        return $this;
-    }
-
-    /**
-     * Добавить амперсанды в командную строку
-     * @return $this
-     */
-    public function addAmpersands(): ShellCommandInterface
-    {
-        $this->addSetting(new Join());
-
-        return $this;
-    }
-
-    /**
-     * Добавить параметры в командную строку
-     * @return $this
-     */
-    public function addArguments(array $values): ShellCommandInterface
-    {
-        foreach ($values as $value) {
-            $this->addSetting(new Argument($value));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Добавить опцию в командную строку
-     *
-     * @return $this
-     */
-    public function addOption(string $option): ShellCommandInterface
-    {
-        $this->addSetting(new Option($option));
-
-        return $this;
-    }
-
-    /**
-     * Добавить опцию в командную строку
-     * @return $this
-     */
-    public function addCutOption(string $option): ShellCommandInterface
-    {
-        $this->addSetting(new CutOption($option));
-
-        return $this;
-    }
-
-    public function addCutOptionWithValue(string $option, string $value): ShellCommandInterface
-    {
-        $this->addSetting(new CutOption($option, $value));
-
-        return $this;
-    }
-
-    /**
-     * Добавить опцию со значением
-     */
-    public function addOptionWithValue(string $option, string $value): ShellCommandInterface
-    {
-        $this->addSetting(new Option($option, $value));
-
-        return $this;
-    }
-
     public function when(bool $condition, \Closure $value): ShellCommandInterface
     {
         if ($condition === true) {
@@ -163,7 +83,7 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
-    private function prepareShellCommand(): string
+    protected function prepareShellCommand(): string
     {
         $cmd = implode(' ', array_merge([$this->getExecutor()], array_map('strval', $this->settings)));
 
