@@ -64,7 +64,7 @@ class ShellCommand implements ShellCommandInterface
 
         exec($line, $result, $code);
 
-        return new CommandResult($line, shell_exec($line), new \DateTime(), $code);
+        return new CommandResult($line, $result, new \DateTime(), $code);
     }
 
     /**
