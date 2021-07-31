@@ -5,29 +5,29 @@ namespace ArtARTs36\ShellCommand\Tests\Unit;
 use ArtARTs36\ShellCommand\CommandRawParser;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class RawParserTest
- * @package ArtARTs36\ShellCommand\Tests\Unit
- */
 class CommandRawParserTest extends TestCase
 {
-    /**
-     * @covers \ArtARTs36\ShellCommand\CommandRawParser::parse
-     */
-    public function testParse(): void
+    public function providerForTestParse(): array
     {
-        $raw = 'cd /var/web';
+        return [
+            [
+                'cd /var/web',
+                "'cd' '/var/web' 2>&1",
+            ],
+            [
+                'php artisan queue:work --delay=5',
+                "'php' 'artisan' 'queue:work' --delay=5 2>&1",
+            ],
+        ];
+    }
 
-        $command = CommandRawParser::parse($raw);
-
-        self::assertEquals("'cd' '/var/web' 2>&1", $command->__toString());
-
-        //
-
-        $raw = 'php artisan queue:work --delay=5';
-
-        $command = CommandRawParser::parse($raw);
-
-        self::assertEquals("'php' 'artisan' 'queue:work' --delay=5 2>&1", $command->__toString());
+    /**
+     * @dataProvider providerForTestParse
+     * @covers \ArtARTs36\ShellCommand\CommandRawParser::parse
+     * @covers \ArtARTs36\ShellCommand\CommandRawParser::createCommand
+     */
+    public function testParse(string $raw, string $prepared): void
+    {
+        self::assertEquals($prepared, (string) CommandRawParser::parse($raw));
     }
 }
