@@ -42,7 +42,7 @@ class Option implements ShellSettingInterface
      */
     public static function explodeAttributesFromRaw(string $raw): array
     {
-        $raw = mb_strcut($raw, mb_strlen(static::$prefix), mb_strlen($raw));
+        $raw = mb_substr($raw, mb_strlen(static::$prefix), mb_strlen($raw));
 
         return explode('=', $raw);
     }

@@ -28,11 +28,11 @@ final class CommandRawParser
             } elseif (Option::isWithValue($param)) {
                 $command->addOptionWithValue(...Option::explodeAttributesFromRaw($param));
             } elseif (Option::is($param)) {
-                $command->addOption($param);
+                $command->addOption(...Option::explodeAttributesFromRaw($param));
             } elseif (CutOption::isWithValue($param)) {
                 $command->addCutOptionWithValue(...CutOption::explodeAttributesFromRaw($param));
             } elseif (CutOption::is($param)) {
-                $command->addCutOption($param);
+                $command->addCutOption(...CutOption::explodeAttributesFromRaw($param));
             }
         }
 

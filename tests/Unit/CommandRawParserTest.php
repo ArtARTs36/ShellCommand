@@ -10,18 +10,18 @@ class CommandRawParserTest extends TestCase
     public function providerForTestParse(): array
     {
         return [
-            [
-                'cd /var/web',
-                "'cd' '/var/web' 2>&1",
-            ],
-            [
-                'php artisan queue:work --delay=5',
-                "'php' 'artisan' 'queue:work' --delay=5 2>&1",
-            ],
+//            [
+//                'cd /var/web',
+//                "'cd' '/var/web' 2>&1",
+//            ],
+//            [
+//                'php artisan queue:work --delay=5',
+//                "'php' 'artisan' 'queue:work' --delay=5 2>&1",
+//            ],
             [
                 'php artisan -cut --full',
                 "'php' 'artisan' -cut --full 2>&1",
-            ]
+            ],
         ];
     }
 
