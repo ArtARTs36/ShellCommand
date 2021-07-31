@@ -272,8 +272,8 @@ class ShellCommand implements ShellCommandInterface
 
     private function handleException(CommandResult $result): void
     {
-        $trigger = $this->exceptions ?? new ResultExceptionTrigger();
+        $this->exceptions = $this->exceptions ?? new ResultExceptionTrigger();
 
-        $trigger->handle($result);
+        $this->exceptions->handle($result);
     }
 }
