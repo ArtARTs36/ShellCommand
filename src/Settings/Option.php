@@ -6,6 +6,8 @@ use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 
 class Option implements ShellSettingInterface
 {
+    protected static $prefix = '--';
+
     protected $option;
 
     protected $value;
@@ -23,7 +25,11 @@ class Option implements ShellSettingInterface
 
     public static function is(string $raw): bool
     {
-        return mb_strpos($raw, '--') === 0;
+        $prefixLength = mb_strlen(static::$prefix);
+        $position = mb_strpos($raw, static::$prefix);
+        $nextSymbol = mb_substr($raw, $prefixLength, 1);
+
+        return $position === 0 && $nextSymbol !== '-';
     }
 
     public static function isWithValue(string $raw): bool
@@ -36,7 +42,7 @@ class Option implements ShellSettingInterface
      */
     public static function explodeAttributesFromRaw(string $raw): array
     {
-        $raw = mb_strcut($raw, 2, mb_strlen($raw));
+        $raw = mb_strcut($raw, mb_strlen(static::$prefix), mb_strlen($raw));
 
         return explode('=', $raw);
     }

@@ -5,14 +5,10 @@ namespace ArtARTs36\ShellCommand\Tests\Unit;
 use ArtARTs36\ShellCommand\Settings\Option;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ShellCommandOptionTest
- * @package ArtARTs36\ShellCommand\Tests\Unit
- */
 class OptionTest extends TestCase
 {
     /**
-     * @covers \ArtARTs36\ShellCommand\Settings\Option
+     * @covers \ArtARTs36\ShellCommand\Settings\Option::__toString
      */
     public function test(): void
     {

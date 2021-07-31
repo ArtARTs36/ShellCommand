@@ -5,10 +5,6 @@ namespace ArtARTs36\ShellCommand\Tests\Unit;
 use ArtARTs36\ShellCommand\ShellCommand;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ShellCommandTest
- * @package ArtARTs36\ShellCommand\Tests\Unit
- */
 class ShellCommandTest extends TestCase
 {
     /**

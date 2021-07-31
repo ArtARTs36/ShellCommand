@@ -18,6 +18,10 @@ class CommandRawParserTest extends TestCase
                 'php artisan queue:work --delay=5',
                 "'php' 'artisan' 'queue:work' --delay=5 2>&1",
             ],
+            [
+                'php artisan -cut --full',
+                "'php' 'artisan' -cut --full 2>&1",
+            ]
         ];
     }
 

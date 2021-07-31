@@ -5,31 +5,31 @@ namespace ArtARTs36\ShellCommand\Tests\Unit;
 use ArtARTs36\ShellCommand\Settings\CutOption;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ShellCommandCutOptionTest
- * @package ArtARTs36\ShellCommand\Tests\Unit
- */
 class CutOptionTest extends TestCase
 {
-    /**
-     * @covers \ArtARTs36\ShellCommand\Settings\CutOption
-     */
-    public function test(): void
+    public function providerForTestToString(): array
     {
-        $option = 'lock';
-        $value = 'yes';
+        return [
+            [
+                '-lock', // expected
+                'lock', // option
+                null, // value
+            ],
+            [
+                '-lock=yes',
+                'lock',
+                'yes',
+            ],
+        ];
+    }
 
-        //
-
-        $instance = new CutOption($option);
-
-        self::assertEquals('-'. $option, $instance->__toString());
-
-        //
-
-        $instance = new CutOption($option, $value);
-
-        self::assertEquals('-'. $option . '='. $value, $instance->__toString());
+    /**
+     * @dataProvider providerForTestToString
+     * @covers \ArtARTs36\ShellCommand\Settings\CutOption::__toString
+     */
+    public function testToString(string $expected, string $option, ?string $value): void
+    {
+        self::assertEquals($expected, new CutOption($option, $value));
     }
 
     /**
