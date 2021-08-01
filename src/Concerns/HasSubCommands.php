@@ -1,6 +1,6 @@
 <?php
 
-namespace ArtARTs36\ShellCommand\Support;
+namespace ArtARTs36\ShellCommand\Concerns;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Settings\Join;

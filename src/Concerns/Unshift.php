@@ -1,10 +1,9 @@
 <?php
 
-namespace ArtARTs36\ShellCommand\Support;
+namespace ArtARTs36\ShellCommand\Concerns;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Settings\Join;
-use ArtARTs36\ShellCommand\Settings\Argument;
 
 trait Unshift
 {
@@ -12,11 +11,6 @@ trait Unshift
 
     private $unshiftMode = false;
 
-    /**
-     * @param \Closure $closure
-     * @param bool $and
-     * @return ShellCommandInterface
-     */
     public function unshift(\Closure $closure, bool $and = false): ShellCommandInterface
     {
         $this->unshiftMode = true;

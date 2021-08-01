@@ -3,13 +3,13 @@
 namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Concerns\HasSettings;
+use ArtARTs36\ShellCommand\Concerns\HasSubCommands;
+use ArtARTs36\ShellCommand\Concerns\Unshift;
 use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
-use ArtARTs36\ShellCommand\Support\HasSubCommands;
-use ArtARTs36\ShellCommand\Support\Unshift;
 
 class ShellCommand implements ShellCommandInterface
 {
