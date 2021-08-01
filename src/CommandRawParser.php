@@ -9,6 +9,9 @@ use ArtARTs36\ShellCommand\Settings\Argument;
 
 final class CommandRawParser
 {
+    /** @link https://regexlib.com/REDetails.aspx?regexp_id=13053 */
+    protected $regex = '/(?:-+([^= \'\"]+)[= ]?)?(?:([\'\"])([^\2]+?)\2|([^- \"\']+))?/';
+
     public static function parse(string $raw): ShellCommand
     {
         return (new self())->createCommand($raw);
@@ -16,9 +19,13 @@ final class CommandRawParser
 
     public function createCommand(string $raw): ShellCommand
     {
-        $params = explode(' ', $raw);
-
         $command = ShellCommand::make();
+
+        $params = $this->parseRawExpression($raw);
+
+        if ($params === null) {
+            return $command;
+        }
 
         foreach ($params as $param) {
             if (Join::is($param)) {
@@ -37,5 +44,17 @@ final class CommandRawParser
         }
 
         return $command;
+    }
+
+    protected function parseRawExpression(string $raw): ?array
+    {
+        $params = [];
+        preg_match_all($this->regex, $raw, $params);
+
+        if (! isset($params[0])) {
+            return null;
+        }
+
+        return array_map('trim', array_filter($params[0]));
     }
 }

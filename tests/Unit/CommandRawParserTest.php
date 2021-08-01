@@ -10,17 +10,29 @@ class CommandRawParserTest extends TestCase
     public function providerForTestParse(): array
     {
         return [
-//            [
-//                'cd /var/web',
-//                "'cd' '/var/web' 2>&1",
-//            ],
-//            [
-//                'php artisan queue:work --delay=5',
-//                "'php' 'artisan' 'queue:work' --delay=5 2>&1",
-//            ],
+            [
+                'cd /var/web',
+                "'cd' '/var/web' 2>&1",
+            ],
+            [
+                'php artisan queue:work --delay=5',
+                "'php' 'artisan' 'queue:work' --delay=5 2>&1",
+            ],
             [
                 'php artisan -cut --full',
                 "'php' 'artisan' -cut --full 2>&1",
+            ],
+            [
+                'php artisan queue:work --queue="app 1" --step=2',
+                "'php' 'artisan' 'queue:work' --queue=\"app 1\" --step=2 2>&1",
+            ],
+            [
+                'php && web -result="one-love"',
+                "'php' && 'web' -result=\"one-love\" 2>&1",
+            ],
+            [
+                '',
+                '',
             ],
         ];
     }
@@ -29,6 +41,7 @@ class CommandRawParserTest extends TestCase
      * @dataProvider providerForTestParse
      * @covers \ArtARTs36\ShellCommand\CommandRawParser::parse
      * @covers \ArtARTs36\ShellCommand\CommandRawParser::createCommand
+     * @covers \ArtARTs36\ShellCommand\CommandRawParser::parseRawExpression
      */
     public function testParse(string $raw, string $prepared): void
     {
