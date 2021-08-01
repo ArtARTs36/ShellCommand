@@ -54,12 +54,12 @@ class ShellCommand implements ShellCommandInterface
     public function execute(): CommandResult
     {
         $line = $this->prepareShellCommand();
-        $result = null;
+        $result = [];
         $code = null;
 
         exec($line, $result, $code);
 
-        return new CommandResult($line, $result, new \DateTime(), $code);
+        return new CommandResult($line, $result ? $result[0] : null, new \DateTime(), $code);
     }
 
     /**
