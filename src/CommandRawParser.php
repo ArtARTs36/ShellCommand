@@ -7,7 +7,7 @@ use ArtARTs36\ShellCommand\Settings\Join;
 use ArtARTs36\ShellCommand\Settings\Option;
 use ArtARTs36\ShellCommand\Settings\Argument;
 
-final class CommandRawParser
+class CommandRawParser
 {
     /** @link https://regexlib.com/REDetails.aspx?regexp_id=13053 */
     protected $regex = '/(?:-+([^= \'\"]+)[= ]?)?(?:([\'\"])([^\2]+?)\2|([^- \"\']+))?/';
