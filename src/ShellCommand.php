@@ -2,6 +2,8 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Executors\ShellExecExecutor;
+use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
@@ -17,7 +19,7 @@ class ShellCommand implements ShellCommandInterface
     public const MOVE_DIR = self::NAVIGATE_TO_DIR;
 
     /** @var string */
-    private $executor;
+    private $bin;
 
     /** @var bool */
     private $isExecuted = false;
@@ -35,22 +37,18 @@ class ShellCommand implements ShellCommandInterface
 
     private $errorFlow;
 
-    /**
-     * ShellCommand constructor.
-     * @param string $executor
-     */
-    public function __construct(string $executor)
+    private $executor;
+
+    public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
-        $this->executor = $executor;
+        $this->bin = $bin;
+        $this->executor = $executor ?? new ShellExecExecutor();
     }
 
     /**
-     * @param string $dir
-     * @param string $executor
      * @deprecated
-     * @return ShellCommand
      */
-    public static function getInstanceWithMoveDir(string $dir, string $executor): ShellCommand
+    public static function getInstanceWithMoveDir(string $dir, string $bin): ShellCommandInterface
     {
         trigger_error(
             'Method ShellCommandInterface::getInstanceWithMoveDir is deprecated.' .
@@ -59,10 +57,10 @@ class ShellCommand implements ShellCommandInterface
             E_USER_DEPRECATED
         );
 
-        return static::withNavigateToDir($dir, $executor);
+        return static::withNavigateToDir($dir, $bin);
     }
 
-    public static function withNavigateToDir(string $dir, string $executor): ShellCommand
+    public static function withNavigateToDir(string $dir, string $executor): ShellCommandInterface
     {
         return (new static(static::NAVIGATE_TO_DIR . ' ' . realpath($dir)))
             ->addAmpersands()
@@ -72,6 +70,13 @@ class ShellCommand implements ShellCommandInterface
     public static function make(string $executor = ''): ShellCommandInterface
     {
         return new static($executor);
+    }
+
+    public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface
+    {
+        $this->executor = $executor;
+
+        return $this;
     }
 
     /**
@@ -215,7 +220,7 @@ class ShellCommand implements ShellCommandInterface
      */
     private function prepareShellCommand(): string
     {
-        $cmd = implode(' ', array_merge([$this->getExecutor()], array_map('strval', $this->settings)));
+        $cmd = implode(' ', array_merge([$this->getBin()], array_map('strval', $this->settings)));
 
         $cmd = trim($cmd);
 
@@ -311,12 +316,12 @@ class ShellCommand implements ShellCommandInterface
     /**
      * @return string
      */
-    protected function getExecutor(): string
+    protected function getBin(): string
     {
-        if ($this->executor === '') {
+        if ($this->bin === '') {
             return '';
         }
 
-        return ($real = realpath($this->executor)) ? $real : $this->executor;
+        return ($real = realpath($this->bin)) ? $real : $this->bin;
     }
 }
