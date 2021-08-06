@@ -35,22 +35,15 @@ class ShellCommand implements ShellCommandInterface
 
     private $errorFlow;
 
-    /**
-     * ShellCommand constructor.
-     * @param string $executor
-     */
-    public function __construct(string $executor)
+    public function __construct(string $bin)
     {
-        $this->executor = $executor;
+        $this->executor = $bin;
     }
 
     /**
-     * @param string $dir
-     * @param string $executor
      * @deprecated
-     * @return ShellCommand
      */
-    public static function getInstanceWithMoveDir(string $dir, string $executor): ShellCommand
+    public static function getInstanceWithMoveDir(string $dir, string $bin): ShellCommandInterface
     {
         trigger_error(
             'Method ShellCommandInterface::getInstanceWithMoveDir is deprecated.' .
@@ -59,10 +52,10 @@ class ShellCommand implements ShellCommandInterface
             E_USER_DEPRECATED
         );
 
-        return static::withNavigateToDir($dir, $executor);
+        return static::withNavigateToDir($dir, $bin);
     }
 
-    public static function withNavigateToDir(string $dir, string $executor): ShellCommand
+    public static function withNavigateToDir(string $dir, string $executor): ShellCommandInterface
     {
         return (new static(static::NAVIGATE_TO_DIR . ' ' . realpath($dir)))
             ->addAmpersands()

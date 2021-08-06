@@ -10,11 +10,11 @@ interface ShellCommandInterface
 {
     /**
      * @param string $dir
-     * @param string $executor
+     * @param string $bin
      * @return ShellCommandInterface
      * @deprecated
      */
-    public static function getInstanceWithMoveDir(string $dir, string $executor);
+    public static function getInstanceWithMoveDir(string $dir, string $bin);
 
     /**
      * @param string $dir - path to navigate to folder
