@@ -88,7 +88,7 @@ class ShellCommand implements ShellCommandInterface
     {
         $this->isExecuted = true;
 
-        $this->shellResult = shell_exec($this->prepareShellCommand());
+        $this->shellResult = $this->executor->execute($this);
 
         return $this;
     }
