@@ -257,10 +257,14 @@ class ShellCommand implements ShellCommandInterface
     }
 
     /**
-     * @return string|false|null
+     * @return false|string
      */
     public function getErrorFlow()
     {
+        if ($this->errorFlow === false) {
+            return false;
+        }
+
         if ($this->inBackground && ! $this->errorFlow) {
             return '/dev/null';
         }
