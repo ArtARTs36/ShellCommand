@@ -66,7 +66,10 @@ class ShellCommand implements ShellCommandInterface
 
     public static function withNavigateToDir(string $dir, string $executor): ShellCommandInterface
     {
-        return (new static(static::NAVIGATE_TO_DIR . ' ' . realpath($dir)))
+        $real = realpath($dir);
+        $to = $real === false ? $dir : $real;
+
+        return (new static(static::NAVIGATE_TO_DIR . ' ' . $to))
             ->addAmpersands()
             ->addParameter($executor);
     }
