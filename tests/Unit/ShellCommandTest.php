@@ -221,6 +221,22 @@ class ShellCommandTest extends TestCase
     }
 
     /**
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::addEnv
+     */
+    public function testAddEnv(): void
+    {
+        $cmd = (new ShellCommand('echo'))
+            ->addEnv('NAME', 'Artem')
+            ->addEnv('FAMILY', 'Ukrainskiy')
+            ->addParameter('$NAME')
+            ->addAmpersands()
+            ->addParameter('echo')
+            ->addParameter('$FAMILY');
+
+        self::assertEquals('export NAME=Artem FAMILY=Ukrainskiy && echo $NAME && echo $FAMILY 2>&1', $cmd);
+    }
+
+    /**
      * @return ShellCommand
      */
     protected function makeCommand(): ShellCommand

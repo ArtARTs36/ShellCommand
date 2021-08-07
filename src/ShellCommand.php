@@ -6,6 +6,7 @@ use ArtARTs36\ShellCommand\Executors\ShellExecExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
+use ArtARTs36\ShellCommand\Settings\EnvVariable;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -38,6 +39,9 @@ class ShellCommand implements ShellCommandInterface
     private $errorFlow;
 
     private $executor;
+
+    /** @var array<string, string> */
+    private $env = [];
 
     public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
@@ -75,6 +79,13 @@ class ShellCommand implements ShellCommandInterface
     public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface
     {
         $this->executor = $executor;
+
+        return $this;
+    }
+
+    public function addEnv(string $key, string $value): ShellCommandInterface
+    {
+        $this->env[$key] = new EnvVariable($key, $value);
 
         return $this;
     }
@@ -220,7 +231,18 @@ class ShellCommand implements ShellCommandInterface
      */
     private function prepareShellCommand(): string
     {
-        $cmd = implode(' ', array_merge([$this->getBin()], array_map('strval', $this->settings)));
+        $parts = [];
+
+        if (count($this->env) > 0) {
+            $parts[] = "export";
+            array_push($parts, ...array_values(array_map('strval', $this->env)));
+            $parts[] = '&&';
+        }
+
+        $parts[] = $this->getBin();
+        array_push($parts, ... array_map('strval', $this->settings));
+
+        $cmd = implode(' ', $parts);
 
         $cmd = trim($cmd);
 

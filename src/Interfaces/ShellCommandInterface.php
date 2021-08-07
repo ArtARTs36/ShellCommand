@@ -2,6 +2,8 @@
 
 namespace ArtARTs36\ShellCommand\Interfaces;
 
+use ArtARTs36\ShellCommand\Result\CommandResult;
+
 /**
  * Interface ShellCommandInterface
  * @package ArtARTs36\ShellCommand\Interfaces
@@ -23,6 +25,8 @@ interface ShellCommandInterface
     public static function withNavigateToDir(string $dir, string $executor);
 
     public static function make(string $executor = ''): ShellCommandInterface;
+
+    public function addEnv(string $key, string $value): ShellCommandInterface;
 
     public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface;
 
@@ -76,7 +80,7 @@ interface ShellCommandInterface
     public function addOptionWithValue(string $option, string $value): self;
 
     /**
-     * @return mixed
+     * @return CommandResult
      */
     public function getShellResult();
 
