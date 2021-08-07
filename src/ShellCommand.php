@@ -2,7 +2,7 @@
 
 namespace ArtARTs36\ShellCommand;
 
-use ArtARTs36\ShellCommand\Executors\ShellExecExecutor;
+use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
@@ -46,7 +46,7 @@ class ShellCommand implements ShellCommandInterface
     public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
         $this->bin = $bin;
-        $this->executor = $executor ?? new ShellExecExecutor();
+        $this->executor = $executor ?? new ProcOpenExecutor();
     }
 
     /**
