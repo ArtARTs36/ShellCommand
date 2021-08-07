@@ -2,6 +2,8 @@
 
 namespace ArtARTs36\ShellCommand\Interfaces;
 
+use ArtARTs36\ShellCommand\Result\CommandResult;
+
 /**
  * Interface ShellCommandInterface
  * @package ArtARTs36\ShellCommand\Interfaces
@@ -76,7 +78,7 @@ interface ShellCommandInterface
     public function addOptionWithValue(string $option, string $value): self;
 
     /**
-     * @return mixed
+     * @return CommandResult
      */
     public function getShellResult();
 

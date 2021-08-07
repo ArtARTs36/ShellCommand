@@ -36,4 +36,9 @@ final class CommandResult
     {
         return $this->result === null;
     }
+
+    public function __toString()
+    {
+        return $this->result;
+    }
 }
