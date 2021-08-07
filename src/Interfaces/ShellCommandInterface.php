@@ -112,5 +112,9 @@ interface ShellCommandInterface
 
     public function setOutputFlow(string $output): ShellCommandInterface;
 
-    public function setErrorFlow(string $error): ShellCommandInterface;
+    /**
+     * @param string|false $error
+     * @return ShellCommandInterface
+     */
+    public function setErrorFlow($error): ShellCommandInterface;
 }
