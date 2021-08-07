@@ -26,6 +26,8 @@ interface ShellCommandInterface
 
     public static function make(string $executor = ''): ShellCommandInterface;
 
+    public function addEnv(string $key, string $value): ShellCommandInterface;
+
     public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface;
 
     /**
