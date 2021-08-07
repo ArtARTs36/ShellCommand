@@ -36,7 +36,7 @@ class ShellCommand implements ShellCommandInterface
 
     private $outputFlow;
 
-    private $errorFlow;
+    private $errorFlow = null;
 
     private $executor;
 
@@ -256,7 +256,10 @@ class ShellCommand implements ShellCommandInterface
         return $this->addFlowIntoCommand($cmd);
     }
 
-    public function getErrorFlow(): string
+    /**
+     * @return string|false|null
+     */
+    public function getErrorFlow()
     {
         if ($this->inBackground && ! $this->errorFlow) {
             return '/dev/null';
@@ -277,7 +280,7 @@ class ShellCommand implements ShellCommandInterface
         return $this;
     }
 
-    public function setErrorFlow(string $error): ShellCommandInterface
+    public function setErrorFlow($error): ShellCommandInterface
     {
         $this->errorFlow = $error;
 
@@ -313,7 +316,9 @@ class ShellCommand implements ShellCommandInterface
             $command .= ' '. $this->parseFlow(FlowType::STDOUT, $this->getOutputFlow());
         }
 
-        $command .= ' ' . $this->parseFlow(FlowType::STDERR, $this->getErrorFlow());
+        if ($this->errorFlow !== false) {
+            $command .= ' ' . $this->parseFlow(FlowType::STDERR, $this->getErrorFlow());
+        }
 
         return $this->inBackground ? $command . ' &' : $command;
     }
