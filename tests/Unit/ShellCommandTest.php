@@ -237,6 +237,20 @@ class ShellCommandTest extends TestCase
     }
 
     /**
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::addPipe
+     */
+    public function testAddPipe(): void
+    {
+        $cmd = ShellCommand::make('cat')
+            ->addParameter('file.txt')
+            ->addPipe()
+            ->addParameter('gzip')
+            ->addCutOption('c');
+
+        self::assertEquals('cat file.txt | gzip -c 2>&1', $cmd);
+    }
+
+    /**
      * @return ShellCommand
      */
     protected function makeCommand(): ShellCommand
