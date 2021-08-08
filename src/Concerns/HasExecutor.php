@@ -7,6 +7,7 @@ use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 
 trait HasExecutor
 {
+    /** @var ShellCommandExecutor */
     private $executor;
 
     public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface
