@@ -2,12 +2,13 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Concerns\Fluent;
 use ArtARTs36\ShellCommand\Concerns\HasEnvVariables;
 use ArtARTs36\ShellCommand\Concerns\HasFlows;
+use ArtARTs36\ShellCommand\Concerns\HasSettings;
 use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
-use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -18,6 +19,8 @@ class ShellCommand implements ShellCommandInterface
     use Unshift;
     use HasFlows;
     use HasEnvVariables;
+    use HasSettings;
+    use Fluent;
 
     public const NAVIGATE_TO_DIR = 'cd';
     public const MOVE_DIR = self::NAVIGATE_TO_DIR;
@@ -27,9 +30,6 @@ class ShellCommand implements ShellCommandInterface
     private $isExecuted = false;
 
     private $shellResult = null;
-
-    /** @var ShellSettingInterface[] */
-    private $settings = [];
 
     private $inBackground = false;
 
@@ -185,20 +185,6 @@ class ShellCommand implements ShellCommandInterface
     }
 
     /**
-     * @param bool $condition
-     * @param \Closure $value
-     * @return ShellCommandInterface
-     */
-    public function when(bool $condition, \Closure $value): ShellCommandInterface
-    {
-        if ($condition === true) {
-            $value($this);
-        }
-
-        return $this;
-    }
-
-    /**
      * Получить результат выполнения программы
      *
      * @return string|null
@@ -274,21 +260,6 @@ class ShellCommand implements ShellCommandInterface
     protected function parseFlow(int $type, string $value): string
     {
         return $type . '>'. $value;
-    }
-
-    /**
-     * @param ShellSettingInterface $setting
-     * @return ShellCommandInterface
-     */
-    protected function addSetting(ShellSettingInterface $setting): ShellCommandInterface
-    {
-        if ($this->unshiftMode === true) {
-            $this->unshift[] = $setting;
-        } else {
-            $this->settings[] = $setting;
-        }
-
-        return $this;
     }
 
     /**
