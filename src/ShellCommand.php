@@ -2,6 +2,7 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Concerns\HasFlows;
 use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
@@ -15,28 +16,21 @@ use ArtARTs36\ShellCommand\Support\Unshift;
 class ShellCommand implements ShellCommandInterface
 {
     use Unshift;
+    use HasFlows;
 
     public const NAVIGATE_TO_DIR = 'cd';
     public const MOVE_DIR = self::NAVIGATE_TO_DIR;
 
-    /** @var string */
     private $bin;
 
-    /** @var bool */
     private $isExecuted = false;
 
-    /** @var string */
     private $shellResult = null;
 
     /** @var ShellSettingInterface[] */
     private $settings = [];
 
-    /** @var bool */
     private $inBackground = false;
-
-    private $outputFlow;
-
-    private $errorFlow = null;
 
     private $executor;
 
@@ -254,41 +248,6 @@ class ShellCommand implements ShellCommandInterface
         }
 
         return $this->addFlowIntoCommand($cmd);
-    }
-
-    /**
-     * @return false|string
-     */
-    public function getErrorFlow()
-    {
-        if ($this->errorFlow === false) {
-            return false;
-        }
-
-        if ($this->inBackground && ! $this->errorFlow) {
-            return '/dev/null';
-        }
-
-        return $this->errorFlow ?? '&'. FlowType::STDOUT;
-    }
-
-    public function getOutputFlow(): ?string
-    {
-        return $this->outputFlow;
-    }
-
-    public function setOutputFlow(string $output): ShellCommandInterface
-    {
-        $this->outputFlow = $output;
-
-        return $this;
-    }
-
-    public function setErrorFlow($error): ShellCommandInterface
-    {
-        $this->errorFlow = $error;
-
-        return $this;
     }
 
     /**
