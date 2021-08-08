@@ -38,7 +38,7 @@ class ShellCommand implements ShellCommandInterface
     public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
         $this->bin = $bin;
-        $this->executor = $executor ?? new ProcOpenExecutor();
+        $this->setExecutor($executor ?? new ProcOpenExecutor());
     }
 
     /**
