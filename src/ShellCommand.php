@@ -2,12 +2,12 @@
 
 namespace ArtARTs36\ShellCommand;
 
+use ArtARTs36\ShellCommand\Concerns\HasEnvVariables;
 use ArtARTs36\ShellCommand\Concerns\HasFlows;
 use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
-use ArtARTs36\ShellCommand\Settings\EnvVariable;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -17,6 +17,7 @@ class ShellCommand implements ShellCommandInterface
 {
     use Unshift;
     use HasFlows;
+    use HasEnvVariables;
 
     public const NAVIGATE_TO_DIR = 'cd';
     public const MOVE_DIR = self::NAVIGATE_TO_DIR;
@@ -33,9 +34,6 @@ class ShellCommand implements ShellCommandInterface
     private $inBackground = false;
 
     private $executor;
-
-    /** @var array<string, string> */
-    private $env = [];
 
     public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
@@ -76,13 +74,6 @@ class ShellCommand implements ShellCommandInterface
     public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface
     {
         $this->executor = $executor;
-
-        return $this;
-    }
-
-    public function addEnv(string $key, string $value): ShellCommandInterface
-    {
-        $this->env[$key] = new EnvVariable($key, $value);
 
         return $this;
     }
