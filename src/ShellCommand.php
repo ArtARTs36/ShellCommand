@@ -66,9 +66,9 @@ class ShellCommand implements ShellCommandInterface
             ->addParameter($executor);
     }
 
-    public static function make(string $executor = ''): ShellCommandInterface
+    public static function make(string $bin = ''): ShellCommandInterface
     {
-        return new static($executor);
+        return new static($bin);
     }
 
     /**

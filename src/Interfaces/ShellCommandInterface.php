@@ -24,7 +24,7 @@ interface ShellCommandInterface
      */
     public static function withNavigateToDir(string $dir, string $executor);
 
-    public static function make(string $executor = ''): ShellCommandInterface;
+    public static function make(string $bin = ''): ShellCommandInterface;
 
     public function addEnv(string $key, string $value): ShellCommandInterface;
 
