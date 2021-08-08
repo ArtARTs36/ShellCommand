@@ -16,4 +16,17 @@ trait HasEnvVariables
 
         return $this;
     }
+
+    protected function buildEnvLineParts(): array
+    {
+        $parts = [];
+
+        if (count($this->env) > 0) {
+            $parts[] = "export";
+            array_push($parts, ...array_values(array_map('strval', $this->env)));
+            $parts[] = '&&';
+        }
+
+        return $parts;
+    }
 }

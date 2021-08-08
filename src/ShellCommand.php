@@ -219,13 +219,7 @@ class ShellCommand implements ShellCommandInterface
      */
     private function prepareShellCommand(): string
     {
-        $parts = [];
-
-        if (count($this->env) > 0) {
-            $parts[] = "export";
-            array_push($parts, ...array_values(array_map('strval', $this->env)));
-            $parts[] = '&&';
-        }
+        $parts = $this->buildEnvLineParts();
 
         $parts[] = $this->getBin();
         array_push($parts, ... array_map('strval', $this->settings));
