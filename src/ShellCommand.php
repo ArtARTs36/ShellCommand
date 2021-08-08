@@ -201,7 +201,7 @@ class ShellCommand implements ShellCommandInterface
         $parts = $this->buildEnvLineParts();
 
         $parts[] = $this->getBin();
-        array_push($parts, ... array_map('strval', $this->settings));
+        array_push($parts, ... $this->buildSettingsLineParts());
 
         $cmd = implode(' ', $parts);
 

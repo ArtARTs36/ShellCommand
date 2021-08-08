@@ -20,4 +20,12 @@ trait HasSettings
 
         return $this;
     }
+
+    /**
+     * @return array<string>
+     */
+    protected function buildSettingsLineParts(): array
+    {
+        return array_map('strval', $this->settings);
+    }
 }
