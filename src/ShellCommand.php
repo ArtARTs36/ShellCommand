@@ -4,6 +4,7 @@ namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Concerns\Fluent;
 use ArtARTs36\ShellCommand\Concerns\HasEnvVariables;
+use ArtARTs36\ShellCommand\Concerns\HasExecutor;
 use ArtARTs36\ShellCommand\Concerns\HasFlows;
 use ArtARTs36\ShellCommand\Concerns\HasSettings;
 use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
@@ -21,6 +22,7 @@ class ShellCommand implements ShellCommandInterface
     use HasEnvVariables;
     use HasSettings;
     use Fluent;
+    use HasExecutor;
 
     public const NAVIGATE_TO_DIR = 'cd';
     public const MOVE_DIR = self::NAVIGATE_TO_DIR;
@@ -32,8 +34,6 @@ class ShellCommand implements ShellCommandInterface
     private $shellResult = null;
 
     private $inBackground = false;
-
-    private $executor;
 
     public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
@@ -69,13 +69,6 @@ class ShellCommand implements ShellCommandInterface
     public static function make(string $executor = ''): ShellCommandInterface
     {
         return new static($executor);
-    }
-
-    public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface
-    {
-        $this->executor = $executor;
-
-        return $this;
     }
 
     /**
