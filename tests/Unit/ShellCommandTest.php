@@ -222,6 +222,7 @@ class ShellCommandTest extends TestCase
 
     /**
      * @covers \ArtARTs36\ShellCommand\ShellCommand::addEnv
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::buildEnvLineParts
      */
     public function testAddEnv(): void
     {
