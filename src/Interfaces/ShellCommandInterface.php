@@ -4,10 +4,6 @@ namespace ArtARTs36\ShellCommand\Interfaces;
 
 use ArtARTs36\ShellCommand\Result\CommandResult;
 
-/**
- * Interface ShellCommandInterface
- * @package ArtARTs36\ShellCommand\Interfaces
- */
 interface ShellCommandInterface
 {
     /**
@@ -54,8 +50,8 @@ interface ShellCommandInterface
     public function addParameters(array $values): self;
 
     /**
-     * @param $option
-     * @return $this
+     * Add option into command line
+     * @param string $option
      */
     public function addOption($option): self;
 
@@ -66,16 +62,14 @@ interface ShellCommandInterface
     public function addCutOption($option): self;
 
     /**
+     * Add cut option with value into command line
      * @param string $option
-     * @param mixed $value
-     * @return $this
+     * @param string $value
      */
     public function addCutOptionWithValue($option, $value): self;
 
     /**
-     * @param string $option
-     * @param string $value
-     * @return $this
+     * Add option with value into command line
      */
     public function addOptionWithValue(string $option, string $value): self;
 
@@ -84,20 +78,12 @@ interface ShellCommandInterface
      */
     public function getShellResult();
 
-    /**
-     * @return bool
-     */
     public function isExecuted(): bool;
 
-    /**
-     * @return string
-     */
     public function __toString(): string;
 
     /**
-     * @param bool $condition
-     * @param \Closure $value
-     * @return $this
+     * Call $value if $condition === true
      */
     public function when(bool $condition, \Closure $value): self;
 
