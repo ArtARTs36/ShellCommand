@@ -16,9 +16,11 @@ class ProcOpenExecutor implements ShellCommandExecutor
         $stdout = $this->readStream($pipes[FlowType::STDOUT]);
         $stderr = $this->readStream($pipes[FlowType::STDERR]);
 
+        $status = proc_get_status($process);
+
         proc_close($process);
 
-        return new CommandResult($command, $stdout, new \DateTime(), $stderr);
+        return new CommandResult($command, $stdout, new \DateTime(), $stderr, $status['exitcode']);
     }
 
     protected function buildProcessAndPipes(ShellCommandInterface $command): array
