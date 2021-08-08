@@ -10,6 +10,7 @@ use ArtARTs36\ShellCommand\Concerns\HasSettings;
 use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
+use ArtARTs36\ShellCommand\Settings\Pipe;
 use ArtARTs36\ShellCommand\Settings\ShellCommandCutOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandOption;
 use ArtARTs36\ShellCommand\Settings\ShellCommandParameter;
@@ -212,6 +213,19 @@ class ShellCommand implements ShellCommandInterface
         }
 
         return $this->addFlowIntoCommand($cmd);
+    }
+
+    public function addPipe(): ShellCommandInterface
+    {
+        $last = $this->getLastSetting();
+
+        if ($last === null || $last instanceof Pipe) {
+            throw new \LogicException('Command is empty or last setting is pipe');
+        }
+
+        $this->addSetting(new Pipe());
+
+        return $this;
     }
 
     /**

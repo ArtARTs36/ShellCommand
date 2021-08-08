@@ -117,4 +117,6 @@ interface ShellCommandInterface
      * @return ShellCommandInterface
      */
     public function setErrorFlow($error): ShellCommandInterface;
+
+    public function addPipe(): ShellCommandInterface;
 }

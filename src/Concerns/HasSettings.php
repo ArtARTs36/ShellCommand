@@ -10,6 +10,11 @@ trait HasSettings
     /** @var ShellSettingInterface[] */
     private $settings = [];
 
+    public function getLastSetting(): ?ShellSettingInterface
+    {
+        return end($this->settings);
+    }
+
     protected function addSetting(ShellSettingInterface $setting): ShellCommandInterface
     {
         if ($this->unshiftMode === true) {
