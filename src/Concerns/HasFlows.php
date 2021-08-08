@@ -45,4 +45,9 @@ trait HasFlows
 
         return $this;
     }
+
+    protected function parseFlow(int $type, string $value): string
+    {
+        return $type . '>'. $value;
+    }
 }

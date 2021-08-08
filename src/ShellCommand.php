@@ -250,11 +250,6 @@ class ShellCommand implements ShellCommandInterface
         return $this->inBackground ? $command . ' &' : $command;
     }
 
-    protected function parseFlow(int $type, string $value): string
-    {
-        return $type . '>'. $value;
-    }
-
     /**
      * @return string
      */
