@@ -8,12 +8,16 @@ use ArtARTs36\ShellCommand\Result\CommandResult;
 interface ShellCommandInterface
 {
     /**
+     * @deprecated
      * @param string $dir - path to navigate to folder
      * @param string $executor - executor alias or path
      * @return ShellCommandInterface
      */
     public static function withNavigateToDir(string $dir, string $executor);
 
+    /**
+     * @deprecated
+     */
     public static function make(string $bin = ''): ShellCommandInterface;
 
     public function addEnv(string $key, string $value): ShellCommandInterface;
