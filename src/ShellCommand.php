@@ -106,7 +106,7 @@ class ShellCommand implements ShellCommandInterface
         $joined = $this->buildJoinCommands();
 
         if ($joined !== '') {
-            $cmd .= $joined;
+            $cmd .= ' ' .$joined;
         }
 
         return $cmd;
