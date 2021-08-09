@@ -222,6 +222,7 @@ class ShellCommandTest extends TestCase
 
     /**
      * @covers \ArtARTs36\ShellCommand\ShellCommand::addEnv
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::buildEnvLineParts
      */
     public function testAddEnv(): void
     {
@@ -234,6 +235,20 @@ class ShellCommandTest extends TestCase
             ->addParameter('$FAMILY');
 
         self::assertEquals('export NAME=Artem FAMILY=Ukrainskiy && echo $NAME && echo $FAMILY 2>&1', $cmd);
+    }
+
+    /**
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::addPipe
+     */
+    public function testAddPipe(): void
+    {
+        $cmd = ShellCommand::make('cat')
+            ->addParameter('file.txt')
+            ->addPipe()
+            ->addParameter('gzip')
+            ->addCutOption('c');
+
+        self::assertEquals('cat file.txt | gzip -c 2>&1', $cmd);
     }
 
     /**

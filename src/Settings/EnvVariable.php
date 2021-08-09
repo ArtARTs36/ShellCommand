@@ -2,9 +2,7 @@
 
 namespace ArtARTs36\ShellCommand\Settings;
 
-use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
-
-class EnvVariable implements ShellSettingInterface
+class EnvVariable
 {
     private $key;
 

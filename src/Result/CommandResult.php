@@ -12,16 +12,20 @@ final class CommandResult
 
     private $stderr;
 
+    private $code;
+
     public function __construct(
         string $commandLine,
         ?string $result,
         \DateTimeInterface $date,
-        ?string $stderr = null
+        ?string $stderr = null,
+        ?int $code = null
     ) {
         $this->commandLine = $commandLine;
         $this->stdout = $result;
         $this->date = $date;
         $this->stderr = $stderr;
+        $this->code = $code;
     }
 
     public function getCommandLine(): string
@@ -55,6 +59,11 @@ final class CommandResult
     public function isEmpty(): bool
     {
         return empty($this->stdout) && empty($this->stderr);
+    }
+
+    public function getCode(): ?int
+    {
+        return $this->code;
     }
 
     public function __toString()
