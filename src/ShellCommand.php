@@ -9,9 +9,7 @@ use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
 use ArtARTs36\ShellCommand\Concerns\Fluent;
 use ArtARTs36\ShellCommand\Concerns\HasEnvVariables;
-use ArtARTs36\ShellCommand\Concerns\HasExecutor;
 use ArtARTs36\ShellCommand\Concerns\HasFlows;
-use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Settings\Pipe;
@@ -30,8 +28,6 @@ class ShellCommand implements ShellCommandInterface
 
     private $bin;
 
-    private $isExecuted = false;
-
     private $inBackground = false;
 
     private $exceptions;
@@ -48,8 +44,6 @@ class ShellCommand implements ShellCommandInterface
      */
     public function execute(ShellCommandExecutor $executor): CommandResult
     {
-        $this->isExecuted = true;
-
         $this->results[] = $result = $executor->execute($this);
 
         return $result;
@@ -69,7 +63,7 @@ class ShellCommand implements ShellCommandInterface
 
     public function isExecuted(): bool
     {
-        return $this->isExecuted;
+        return count($this->results) > 0;
     }
 
     protected function prepareShellCommand(): string
