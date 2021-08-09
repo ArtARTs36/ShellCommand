@@ -38,7 +38,8 @@ $result = $command->execute();
 var_dump($result->getCommandLine());
 var_dump($result->getCode());
 var_dump($result->getDate());
-var_dump($result->getCode());
+var_dump($result->getResult());
+var_dump($result->getError());
 ```
 
 #### 2. SSH

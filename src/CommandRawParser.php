@@ -14,7 +14,7 @@ class CommandRawParser
 
     public static function parse(string $raw): ShellCommand
     {
-        return (new self())->createCommand($raw);
+        return (new static())->createCommand($raw);
     }
 
     public function createCommand(string $raw): ShellCommand
