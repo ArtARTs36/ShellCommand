@@ -53,11 +53,6 @@ class CommandResult
         return $this->stderr;
     }
 
-    public function isNull(): bool
-    {
-        return $this->stdout === null;
-    }
-
     public function isEmpty(): bool
     {
         return $this->stdout->isEmpty() && $this->stderr->isEmpty();
