@@ -38,6 +38,8 @@ trait HasSettings
         foreach ($values as $value) {
             $this->addSetting(new Argument($value));
         }
+
+        return $this;
     }
 
     public function getLastSetting(): ?ShellSettingInterface

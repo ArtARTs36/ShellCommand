@@ -48,7 +48,8 @@ class ShellCommand implements ShellCommandInterface
         $real = realpath($dir);
         $to = $real === false ? $dir : $real;
 
-        return (new static(static::NAVIGATE_TO_DIR . ' ' . $to))
+        return static::make(static::NAVIGATE_TO_DIR)
+            ->addArgument($to)
             ->addAmpersands()
             ->addArgument($executor);
     }

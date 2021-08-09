@@ -197,12 +197,15 @@ class ShellCommandTest extends TestCase
         $cmd = (new ShellCommand('echo'))
             ->addEnv('NAME', 'Artem')
             ->addEnv('FAMILY', 'Ukrainskiy')
-            ->addParameter('$NAME')
+            ->addArgument('$NAME')
             ->addAmpersands()
-            ->addParameter('echo')
-            ->addParameter('$FAMILY');
+            ->addArgument('echo')
+            ->addArgument('$FAMILY');
 
-        self::assertEquals('export NAME=Artem FAMILY=Ukrainskiy && echo $NAME && echo $FAMILY 2>&1', $cmd);
+        self::assertEquals(
+            'export NAME=Artem FAMILY=Ukrainskiy && echo \'$NAME\' && \'echo\' \'$FAMILY\' 2>&1',
+            (string) $cmd
+        );
     }
 
     /**
@@ -211,12 +214,12 @@ class ShellCommandTest extends TestCase
     public function testAddPipe(): void
     {
         $cmd = ShellCommand::make('cat')
-            ->addParameter('file.txt')
+            ->addArgument('file.txt')
             ->addPipe()
-            ->addParameter('gzip')
+            ->addArgument('gzip')
             ->addCutOption('c');
 
-        self::assertEquals('cat file.txt | gzip -c 2>&1', $cmd);
+        self::assertEquals('cat \'file.txt\' | \'gzip\' -c 2>&1', (string) $cmd);
     }
 
     /**
