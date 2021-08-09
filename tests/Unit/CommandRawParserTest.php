@@ -12,23 +12,23 @@ class CommandRawParserTest extends TestCase
         return [
             [
                 'cd /var/web',
-                "'cd' '/var/web' 2>&1",
+                "'cd' '/var/web'",
             ],
             [
                 'php artisan queue:work --delay=5',
-                "'php' 'artisan' 'queue:work' --delay=5 2>&1",
+                "'php' 'artisan' 'queue:work' --delay=5",
             ],
             [
                 'php artisan -cut --full',
-                "'php' 'artisan' -cut --full 2>&1",
+                "'php' 'artisan' -cut --full",
             ],
             [
                 'php artisan queue:work --queue="app 1" --step=2',
-                "'php' 'artisan' 'queue:work' --queue=\"app 1\" --step=2 2>&1",
+                "'php' 'artisan' 'queue:work' --queue=\"app 1\" --step=2",
             ],
             [
                 'php && web -result="one-love"',
-                "'php' && 'web' -result=\"one-love\" 2>&1",
+                "'php' && 'web' -result=\"one-love\"",
             ],
             [
                 '',
