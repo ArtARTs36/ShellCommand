@@ -83,7 +83,7 @@ interface ShellCommandInterface
      */
     public function unshift(\Closure $closure, bool $and = false): self;
 
-    public function inBackground(): self;
+    public function toBackground(): self;
 
     public function setOutputFlow(string $output): ShellCommandInterface;
 

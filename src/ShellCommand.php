@@ -133,7 +133,7 @@ class ShellCommand implements ShellCommandInterface
         return $this->prepareShellCommand();
     }
 
-    public function inBackground(): ShellCommandInterface
+    public function toBackground(): ShellCommandInterface
     {
         $this->inBackground = true;
 

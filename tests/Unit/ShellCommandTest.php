@@ -176,14 +176,14 @@ class ShellCommandTest extends TestCase
     }
 
     /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::inBackground
+     * @covers \ArtARTs36\ShellCommand\ShellCommand::toBackground
      */
-    public function testInBackground(): void
+    public function testToBackground(): void
     {
         $cmd = new ShellCommand('pg_dump');
         $cmd->addArgument('database');
         $cmd->setOutputFlow('dump.sql');
-        $cmd->inBackground();
+        $cmd->toBackground();
 
         self::assertEquals("pg_dump 'database' 1>dump.sql &", $cmd->__toString());
     }
