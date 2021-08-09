@@ -11,4 +11,6 @@ interface CommandBuilder
     public function makeNavigateToDir(string $dir, string $bin): ShellCommandInterface;
 
     public function make(string $bin = ''): ShellCommandInterface;
+
+    public function fromRaw(string $command): ShellCommandInterface;
 }
