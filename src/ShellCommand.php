@@ -43,26 +43,10 @@ class ShellCommand implements ShellCommandInterface
         $this->setExecutor($executor ?? new ProcOpenExecutor());
     }
 
-    public static function withNavigateToDir(string $dir, string $executor): ShellCommandInterface
-    {
-        $real = realpath($dir);
-        $to = $real === false ? $dir : $real;
-
-        return static::make(static::NAVIGATE_TO_DIR)
-            ->addArgument($to)
-            ->addAmpersands()
-            ->addArgument($executor);
-    }
-
-    public static function make(string $bin = ''): ShellCommandInterface
-    {
-        return new static($bin);
-    }
-
     /**
      * Выполнить программу
      */
-    public function execute(): CommandResult
+    public function execute(ShellCommandExecutor $executor): CommandResult
     {
         $this->isExecuted = true;
 
