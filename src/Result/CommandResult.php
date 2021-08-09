@@ -4,7 +4,7 @@ namespace ArtARTs36\ShellCommand\Result;
 
 use ArtARTs36\Str\Str;
 
-final class CommandResult
+class CommandResult
 {
     private $commandLine;
 
@@ -21,7 +21,7 @@ final class CommandResult
         Str $result,
         \DateTimeInterface $date,
         Str $stderr,
-        ?int $code = null
+        int $code
     ) {
         $this->commandLine = $commandLine;
         $this->stdout = $result;
@@ -60,12 +60,17 @@ final class CommandResult
 
     public function isEmpty(): bool
     {
-        return empty($this->stdout) && empty($this->stderr);
+        return $this->stdout->isEmpty() && $this->stderr->isEmpty();
     }
 
-    public function getCode(): ?int
+    public function getCode(): int
     {
         return $this->code;
+    }
+
+    public function isOk(): bool
+    {
+        return $this->code === ResultCode::OK;
     }
 
     public function __toString()
