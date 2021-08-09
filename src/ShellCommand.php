@@ -37,6 +37,8 @@ class ShellCommand implements ShellCommandInterface
 
     private $exceptions;
 
+    private $results = [];
+
     public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
         $this->bin = $bin;
@@ -50,15 +52,17 @@ class ShellCommand implements ShellCommandInterface
     {
         $this->isExecuted = true;
 
-        return $this->executor->execute($this);
+        $this->results[] = $result = $this->executor->execute($this);
+
+        return $result;
     }
 
     /**
      * @throws CommandFailed
      */
-    public function executeOrFail(): CommandResult
+    public function executeOrFail(ShellCommandExecutor $executor): CommandResult
     {
-        $result = $this->execute();
+        $result = $this->execute($executor);
 
         $this->handleException($result);
 
@@ -122,6 +126,16 @@ class ShellCommand implements ShellCommandInterface
         $this->inBackground = true;
 
         return $this;
+    }
+
+    public function inBackground(): bool
+    {
+        return $this->inBackground;
+    }
+
+    public function getResults(): array
+    {
+        return $this->results;
     }
 
     protected function addFlowIntoCommand(string $command): string

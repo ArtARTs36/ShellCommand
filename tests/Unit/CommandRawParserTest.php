@@ -39,12 +39,13 @@ class CommandRawParserTest extends TestCase
 
     /**
      * @dataProvider providerForTestParse
-     * @covers \ArtARTs36\ShellCommand\CommandRawParser::parse
      * @covers \ArtARTs36\ShellCommand\CommandRawParser::createCommand
      * @covers \ArtARTs36\ShellCommand\CommandRawParser::parseRawExpression
      */
     public function testParse(string $raw, string $prepared): void
     {
-        self::assertEquals($prepared, (string) CommandRawParser::parse($raw));
+        $parser = new CommandRawParser();
+
+        self::assertEquals($prepared, (string) $parser->createCommand($raw));
     }
 }

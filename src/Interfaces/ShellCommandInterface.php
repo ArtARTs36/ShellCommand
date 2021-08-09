@@ -15,9 +15,10 @@ interface ShellCommandInterface
     public function execute(ShellCommandExecutor $executor): CommandResult;
 
     /**
+     * Execute the command or failure Exception
      * @throws CommandFailed
      */
-    public function executeOrFail(): CommandResult;
+    public function executeOrFail(ShellCommandExecutor $executor): CommandResult;
 
     public function isExecuted(): bool;
 
@@ -74,6 +75,8 @@ interface ShellCommandInterface
 
     public function toBackground(): self;
 
+    public function inBackground(): bool;
+
     public function setOutputFlow(string $output): ShellCommandInterface;
 
     /**
@@ -99,4 +102,9 @@ interface ShellCommandInterface
      * @return array<ShellSettingInterface>
      */
     public function getSettings(): array;
+
+    /**
+     * @return array<CommandResult>
+     */
+    public function getResults(): array;
 }

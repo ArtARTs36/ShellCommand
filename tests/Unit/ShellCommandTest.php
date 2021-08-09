@@ -99,24 +99,11 @@ class ShellCommandTest extends TestCase
     }
 
     /**
-     * @covers \ArtARTs36\ShellCommand\ShellCommand::withNavigateToDir
-     */
-    public function testWithNavigateToDir(): void
-    {
-        $dir = __DIR__;
-        $executor = 'git';
-
-        $command = ShellCommand::withNavigateToDir($dir, $executor);
-
-        self::assertEquals("cd '{$dir}' && '$executor'", $command->__toString());
-    }
-
-    /**
      * @covers \ArtARTs36\ShellCommand\ShellCommand::when
      */
     public function testWhen(): void
     {
-        $command = (new ShellCommand('git'))
+        $command = $this->makeCommand('git')
             ->when(false, function (ShellCommand $command) {
                 $command->addArgument('pull');
             });
@@ -180,10 +167,10 @@ class ShellCommandTest extends TestCase
      */
     public function testToBackground(): void
     {
-        $cmd = new ShellCommand('pg_dump');
-        $cmd->addArgument('database');
-        $cmd->setOutputFlow('dump.sql');
-        $cmd->toBackground();
+        $cmd = $this->makeCommand('pg_dump')
+            ->addArgument('database')
+            ->setOutputFlow('dump.sql')
+            ->toBackground();
 
         self::assertEquals("pg_dump 'database' 1>dump.sql &", $cmd->__toString());
     }
@@ -194,7 +181,7 @@ class ShellCommandTest extends TestCase
      */
     public function testAddEnv(): void
     {
-        $cmd = (new ShellCommand('echo'))
+        $cmd = $this->makeCommand('echo')
             ->addEnv('NAME', 'Artem')
             ->addEnv('FAMILY', 'Ukrainskiy')
             ->addArgument('$NAME')
@@ -213,7 +200,7 @@ class ShellCommandTest extends TestCase
      */
     public function testAddPipe(): void
     {
-        $cmd = ShellCommand::make('cat')
+        $cmd = $this->makeCommand('cat')
             ->addArgument('file.txt')
             ->addPipe()
             ->addArgument('gzip')
@@ -225,8 +212,8 @@ class ShellCommandTest extends TestCase
     /**
      * @return ShellCommand
      */
-    protected function makeCommand(): ShellCommand
+    protected function makeCommand(string $bin = ''): ShellCommand
     {
-        return new ShellCommand('');
+        return new ShellCommand($bin);
     }
 }

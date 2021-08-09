@@ -12,14 +12,9 @@ class CommandRawParser
     /** @link https://regexlib.com/REDetails.aspx?regexp_id=13053 */
     protected $regex = '/(?:-+([^= \'\"]+)[= ]?)?(?:([\'\"])([^\2]+?)\2|([^- \"\']+))?/';
 
-    public static function parse(string $raw): ShellCommand
-    {
-        return (new static())->createCommand($raw);
-    }
-
     public function createCommand(string $raw): ShellCommand
     {
-        $command = ShellCommand::make();
+        $command = new ShellCommand('');
 
         $params = $this->parseRawExpression($raw);
 
