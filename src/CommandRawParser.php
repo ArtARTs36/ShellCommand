@@ -3,7 +3,7 @@
 namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Settings\CutOption;
-use ArtARTs36\ShellCommand\Settings\Join;
+use ArtARTs36\ShellCommand\Settings\JoinAnd;
 use ArtARTs36\ShellCommand\Settings\Option;
 use ArtARTs36\ShellCommand\Settings\Argument;
 
@@ -28,7 +28,7 @@ class CommandRawParser
         }
 
         foreach ($params as $param) {
-            if (Join::is($param)) {
+            if (JoinAnd::is($param)) {
                 $command->addAmpersands();
             } elseif (Argument::is($param)) {
                 $command->addArgument($param);

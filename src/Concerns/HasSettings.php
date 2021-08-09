@@ -5,7 +5,7 @@ namespace ArtARTs36\ShellCommand\Concerns;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
 use ArtARTs36\ShellCommand\Settings\Argument;
-use ArtARTs36\ShellCommand\Settings\Join;
+use ArtARTs36\ShellCommand\Settings\JoinAnd;
 use ArtARTs36\ShellCommand\Settings\Option;
 use ArtARTs36\ShellCommand\Settings\CutOption;
 
@@ -28,7 +28,7 @@ trait HasSettings
 
     public function addAmpersands(): ShellCommandInterface
     {
-        $this->addSetting(new Join());
+        $this->addSetting(new JoinAnd());
 
         return $this;
     }

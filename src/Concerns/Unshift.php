@@ -3,7 +3,7 @@
 namespace ArtARTs36\ShellCommand\Concerns;
 
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
-use ArtARTs36\ShellCommand\Settings\Join;
+use ArtARTs36\ShellCommand\Settings\JoinAnd;
 
 trait Unshift
 {
@@ -18,7 +18,7 @@ trait Unshift
         $closure($this);
 
         if ($and === true && !empty($this->settings)) {
-            $this->unshift[] = new Join();
+            $this->unshift[] = new JoinAnd();
         }
 
         $this->settings = array_merge($this->unshift, $this->settings);

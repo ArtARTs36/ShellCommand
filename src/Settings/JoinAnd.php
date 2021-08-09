@@ -2,9 +2,9 @@
 
 namespace ArtARTs36\ShellCommand\Settings;
 
-use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
+use ArtARTs36\ShellCommand\Interfaces\JoinSetting;
 
-class Join implements ShellSettingInterface
+class JoinAnd implements JoinSetting
 {
     public function __toString(): string
     {

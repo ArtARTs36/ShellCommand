@@ -94,7 +94,14 @@ interface ShellCommandInterface
     /**
      * @return $this
      */
-    public function join(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
+    public function joinAnd(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
+
+    /**
+     * @return $this
+     */
+    public function joinAnyway(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
+
+    public function joinOr(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
 
     /**
      * @return array<ShellSettingInterface>
