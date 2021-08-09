@@ -21,7 +21,7 @@ trait HasSettings
 
     public function addArgument(string $value, bool $escape = true): ShellCommandInterface
     {
-        $this->addSetting(new Argument($value));
+        $this->addSetting(new Argument($value, $escape));
 
         return $this;
     }

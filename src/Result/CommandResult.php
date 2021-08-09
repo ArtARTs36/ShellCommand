@@ -73,6 +73,11 @@ class CommandResult
         return $this->code === ResultCode::OK;
     }
 
+    public function isFail(): bool
+    {
+        return ! $this->isOk();
+    }
+
     public function __toString()
     {
         return $this->stdout->__toString();

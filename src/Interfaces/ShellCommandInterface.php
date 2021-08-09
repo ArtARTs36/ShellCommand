@@ -87,6 +87,9 @@ interface ShellCommandInterface
 
     public function setOutputFlow(string $output): ShellCommandInterface;
 
+    /**
+     * Add pipe "|" into command line
+     */
     public function addPipe(): ShellCommandInterface;
 
     public function setErrorFlow(string $error): ShellCommandInterface;
