@@ -14,16 +14,17 @@ interface ShellCommandInterface
      */
     public static function withNavigateToDir(string $dir, string $executor);
 
-    public static function make(string $executor = ''): ShellCommandInterface;
+    public static function make(string $bin = ''): ShellCommandInterface;
+
+    public function addEnv(string $key, string $value): ShellCommandInterface;
+
+    public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface;
 
     /**
      * Execute the shell script
      */
     public function execute(): CommandResult;
 
-    /**
-     * @return $this
-     */
     public function addArgument(string $value): self;
 
     /**
@@ -38,7 +39,7 @@ interface ShellCommandInterface
     public function addArguments(array $values): self;
 
     /**
-     * @return $this
+     * Add option into command line
      */
     public function addOption(string $option): self;
 
@@ -48,14 +49,13 @@ interface ShellCommandInterface
     public function addCutOption(string $option): self;
 
     /**
+     * Add cut option with value into command line
      * @return $this
      */
     public function addCutOptionWithValue(string $option, string $value): self;
 
     /**
-     * @param string $option
-     * @param string $value
-     * @return $this
+     * Add option with value into command line
      */
     public function addOptionWithValue(string $option, string $value): self;
 
@@ -65,9 +65,7 @@ interface ShellCommandInterface
     public function __toString(): string;
 
     /**
-     * @param bool $condition
-     * @param \Closure $value
-     * @return $this
+     * Call $value if $condition === true
      */
     public function when(bool $condition, \Closure $value): self;
 
@@ -81,6 +79,8 @@ interface ShellCommandInterface
     public function inBackground(): self;
 
     public function setOutputFlow(string $output): ShellCommandInterface;
+
+    public function addPipe(): ShellCommandInterface;
 
     public function setErrorFlow(string $error): ShellCommandInterface;
 

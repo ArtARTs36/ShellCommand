@@ -13,9 +13,11 @@ ShellCommand
 
 Run: `composer require artarts36/shell-command`
 
+---
+
 ### Examples:
 
-1. Arguments && Options
+#### 1. Arguments && Options
 
 ```php
 use ArtARTs36\ShellCommand\ShellCommand;
@@ -25,7 +27,7 @@ $command = ShellCommand::make('git')->addArgument('push')->addOption('force');
 var_dump($command->__toString()); // git 'push' --force 2>&1
 ```
 
-2. Execute Commands
+#### 2. Execute Commands
 
 ```php
 use ArtARTs36\ShellCommand\ShellCommand;
@@ -37,4 +39,24 @@ var_dump($result->getCommandLine());
 var_dump($result->getCode());
 var_dump($result->getDate());
 var_dump($result->getCode());
+```
+
+#### 2. SSH
+
+To use ssh, you need to connect the library ["artarts36/shell-command-ssh-executor"](https://github.com/ArtARTs36/php-shell-command-ssh-executor):
+
+Run command `artarts36/shell-command-ssh-executor`
+
+```php
+$connection = \ArtARTs36\ShellCommandSshExecutor\SSH\Connection::withPassword(
+    'remote.host',
+    'user',
+    'password'
+);
+
+$command = \ArtARTs36\ShellCommand\ShellCommand::make('ls');
+
+$command->setExecutor(new \ArtARTs36\ShellCommandSshExecutor\SshCommandExecutor($connection));
+
+var_dump($command->getShellResult());
 ```

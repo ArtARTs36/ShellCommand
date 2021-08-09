@@ -38,6 +38,20 @@ trait HasSettings
         foreach ($values as $value) {
             $this->addSetting(new Argument($value));
         }
+    }
+
+    public function getLastSetting(): ?ShellSettingInterface
+    {
+        return end($this->settings);
+    }
+
+    protected function addSetting(ShellSettingInterface $setting): ShellCommandInterface
+    {
+        if ($this->unshiftMode === true) {
+            $this->unshift[] = $setting;
+        } else {
+            $this->settings[] = $setting;
+        }
 
         return $this;
     }
@@ -68,5 +82,12 @@ trait HasSettings
         $this->addSetting(new Option($option, $value));
 
         return $this;
+    }
+    /**
+     * @return array<string>
+     */
+    protected function buildSettingsLineParts(): array
+    {
+        return array_map('strval', $this->settings);
     }
 }

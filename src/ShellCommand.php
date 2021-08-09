@@ -7,45 +7,55 @@ use ArtARTs36\ShellCommand\Concerns\HasSubCommands;
 use ArtARTs36\ShellCommand\Concerns\Unshift;
 use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
+use ArtARTs36\ShellCommand\Concerns\Fluent;
+use ArtARTs36\ShellCommand\Concerns\HasEnvVariables;
+use ArtARTs36\ShellCommand\Concerns\HasExecutor;
+use ArtARTs36\ShellCommand\Concerns\HasFlows;
+use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
+use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
-use ArtARTs36\ShellCommand\Interfaces\ShellSettingInterface;
+use ArtARTs36\ShellCommand\Settings\Pipe;
 use ArtARTs36\ShellCommand\Result\CommandResult;
 
 class ShellCommand implements ShellCommandInterface
 {
     use Unshift;
-    use HasSubCommands;
+    use HasFlows;
+    use HasEnvVariables;
     use HasSettings;
+    use Fluent;
+    use HasExecutor;
+    use HasSubCommands;
 
     public const NAVIGATE_TO_DIR = 'cd';
 
-    private $executor;
+    private $bin;
+
+    private $isExecuted = false;
 
     private $inBackground = false;
 
-    private $outputFlow;
-
-    private $errorFlow;
-
     private $exceptions;
 
-    public function __construct(string $executor, ?ResultExceptionTrigger $exceptions = null)
+    public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
     {
-        $this->executor = $executor;
-        $this->exceptions = $exceptions;
+        $this->bin = $bin;
+        $this->setExecutor($executor ?? new ProcOpenExecutor());
     }
 
-    public static function withNavigateToDir(string $dir, string $executor): ShellCommand
+    public static function withNavigateToDir(string $dir, string $executor): ShellCommandInterface
     {
-        return (new static(static::NAVIGATE_TO_DIR))
-            ->addArgument(realpath($dir))
+        $real = realpath($dir);
+        $to = $real === false ? $dir : $real;
+
+        return (new static(static::NAVIGATE_TO_DIR . ' ' . $to))
             ->addAmpersands()
             ->addArgument($executor);
     }
 
-    public static function make(string $executor = ''): ShellCommandInterface
+    public static function make(string $bin = ''): ShellCommandInterface
     {
-        return new static($executor);
+        return new static($bin);
     }
 
     /**
@@ -74,18 +84,14 @@ class ShellCommand implements ShellCommandInterface
         return $result;
     }
 
-    public function when(bool $condition, \Closure $value): ShellCommandInterface
-    {
-        if ($condition === true) {
-            $value($this);
-        }
-
-        return $this;
-    }
-
     protected function prepareShellCommand(): string
     {
-        $cmd = implode(' ', array_merge([$this->getExecutor()], array_map('strval', $this->settings)));
+        $parts = $this->buildEnvLineParts();
+
+        $parts[] = $this->getBin();
+        array_push($parts, ... $this->buildSettingsLineParts());
+
+        $cmd = implode(' ', $parts);
 
         $cmd = trim($cmd);
 
@@ -104,30 +110,15 @@ class ShellCommand implements ShellCommandInterface
         return $cmd;
     }
 
-    public function getErrorFlow(): string
+    public function addPipe(): ShellCommandInterface
     {
-        if ($this->inBackground && ! $this->errorFlow) {
-            return '/dev/null';
+        $last = $this->getLastSetting();
+
+        if ($last === null || $last instanceof Pipe) {
+            throw new \LogicException('Command is empty or last setting is pipe');
         }
 
-        return $this->errorFlow ?? '&'. FlowType::STDOUT;
-    }
-
-    public function getOutputFlow(): ?string
-    {
-        return $this->outputFlow;
-    }
-
-    public function setOutputFlow(string $output): ShellCommandInterface
-    {
-        $this->outputFlow = $output;
-
-        return $this;
-    }
-
-    public function setErrorFlow(string $error): ShellCommandInterface
-    {
-        $this->errorFlow = $error;
+        $this->addSetting(new Pipe());
 
         return $this;
     }
@@ -153,41 +144,23 @@ class ShellCommand implements ShellCommandInterface
             $command .= ' '. $this->parseFlow(FlowType::STDOUT, $this->getOutputFlow());
         }
 
-        $command .= ' ' . $this->parseFlow(FlowType::STDERR, $this->getErrorFlow());
-
-        return $this->inBackground ? $command . ' &' : $command;
-    }
-
-    protected function parseFlow(int $type, string $value): string
-    {
-        return $type . '>'. $value;
-    }
-
-    /**
-     * @param ShellSettingInterface $setting
-     * @return ShellCommandInterface
-     */
-    protected function addSetting(ShellSettingInterface $setting): ShellCommandInterface
-    {
-        if ($this->unshiftMode === true) {
-            $this->unshift[] = $setting;
-        } else {
-            $this->settings[] = $setting;
+        if ($this->errorFlow !== false) {
+            $command .= ' ' . $this->parseFlow(FlowType::STDERR, $this->getErrorFlow());
         }
 
-        return $this;
+        return $this->inBackground ? $command . ' &' : $command;
     }
 
     /**
      * @return string
      */
-    protected function getExecutor(): string
+    protected function getBin(): string
     {
-        if ($this->executor === '') {
+        if ($this->bin === '') {
             return '';
         }
 
-        return ($real = realpath($this->executor)) ? $real : $this->executor;
+        return ($real = realpath($this->bin)) ? $real : $this->bin;
     }
 
     private function handleException(CommandResult $result): void
