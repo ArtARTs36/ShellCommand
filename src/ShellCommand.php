@@ -24,7 +24,6 @@ class ShellCommand implements ShellCommandInterface
     use HasEnvVariables;
     use HasSettings;
     use Fluent;
-    use HasExecutor;
     use HasSubCommands;
 
     public const NAVIGATE_TO_DIR = 'cd';
@@ -39,10 +38,9 @@ class ShellCommand implements ShellCommandInterface
 
     private $results = [];
 
-    public function __construct(string $bin, ?ShellCommandExecutor $executor = null)
+    public function __construct(string $bin)
     {
         $this->bin = $bin;
-        $this->setExecutor($executor ?? new ProcOpenExecutor());
     }
 
     /**
@@ -52,7 +50,7 @@ class ShellCommand implements ShellCommandInterface
     {
         $this->isExecuted = true;
 
-        $this->results[] = $result = $this->executor->execute($this);
+        $this->results[] = $result = $executor->execute($this);
 
         return $result;
     }

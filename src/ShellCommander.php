@@ -3,28 +3,18 @@
 namespace ArtARTs36\ShellCommand;
 
 use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
-use ArtARTs36\ShellCommand\Interfaces\Commander;
+use ArtARTs36\ShellCommand\Interfaces\CommandBuilder;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
 
-class ShellCommander implements Commander
+class ShellCommander implements CommandBuilder
 {
-    protected $executor;
-
     protected $parser;
 
-    public function __construct(?ShellCommandExecutor $executor = null, ?CommandRawParser $parser = null)
+    public function __construct(?CommandRawParser $parser = null)
     {
-        $this->executor = $executor ?? new ProcOpenExecutor();
         $this->parser = $parser ?? new CommandRawParser();
-    }
-
-    public function useExecutor(ShellCommandExecutor $executor): self
-    {
-        $this->executor = $executor;
-
-        return $this;
     }
 
     public function makeNavigateToDir(string $dir, string $bin): ShellCommandInterface
@@ -41,7 +31,7 @@ class ShellCommander implements Commander
 
     public function make(string $bin = ''): ShellCommandInterface
     {
-        return new ShellCommand($bin, $this->executor);
+        return new ShellCommand($bin);
     }
 
     public function fromRaw(string $command): ShellCommandInterface
