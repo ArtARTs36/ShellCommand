@@ -32,7 +32,7 @@ interface ShellCommandInterface
 
     public function isExecuted(): bool;
 
-    public function addArgument(string $value): self;
+    public function addArgument(string $value, bool $escape = true): self;
 
     /**
      * @return $this

@@ -19,7 +19,7 @@ trait HasSettings
         return $this->settings;
     }
 
-    public function addArgument(string $value): ShellCommandInterface
+    public function addArgument(string $value, bool $escape = true): ShellCommandInterface
     {
         $this->addSetting(new Argument($value));
 
