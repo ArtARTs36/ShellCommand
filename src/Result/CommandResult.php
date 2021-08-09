@@ -2,6 +2,8 @@
 
 namespace ArtARTs36\ShellCommand\Result;
 
+use ArtARTs36\Str\Str;
+
 final class CommandResult
 {
     private $commandLine;
@@ -16,9 +18,9 @@ final class CommandResult
 
     public function __construct(
         string $commandLine,
-        ?string $result,
+        Str $result,
         \DateTimeInterface $date,
-        ?string $stderr = null,
+        Str $stderr,
         ?int $code = null
     ) {
         $this->commandLine = $commandLine;
@@ -38,15 +40,15 @@ final class CommandResult
         return $this->date;
     }
 
-    public function getResult(): ?string
+    public function getResult(): Str
     {
         return $this->stdout;
     }
 
     /**
-     * @return string|null - from stderr
+     * from stderr
      */
-    public function getError(): ?string
+    public function getError(): Str
     {
         return $this->stderr;
     }
@@ -68,6 +70,6 @@ final class CommandResult
 
     public function __toString()
     {
-        return $this->stdout;
+        return $this->stdout->__toString();
     }
 }

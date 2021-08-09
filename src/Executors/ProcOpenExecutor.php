@@ -6,6 +6,7 @@ use ArtARTs36\ShellCommand\FlowType;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
+use ArtARTs36\Str\Str;
 
 class ProcOpenExecutor implements ShellCommandExecutor
 {
@@ -20,7 +21,13 @@ class ProcOpenExecutor implements ShellCommandExecutor
 
         proc_close($process);
 
-        return new CommandResult($command, $stdout, new \DateTime(), $stderr, $status['exitcode']);
+        return new CommandResult(
+            $command,
+            Str::make($stdout ?? ''),
+            new \DateTime(),
+            Str::make($stderr ?? ''),
+            $status['exitcode']
+        );
     }
 
     protected function buildProcessAndPipes(ShellCommandInterface $command): array
