@@ -64,13 +64,7 @@ class ShellCommand implements ShellCommandInterface
      */
     public function execute(): CommandResult
     {
-        $line = $this->prepareShellCommand();
-        $result = [];
-        $code = null;
-
-        exec($line, $result, $code);
-
-        return new CommandResult($line, $result ? $result[0] : null, new \DateTime(), $code);
+        return $this->executor->execute($this);
     }
 
     /**
@@ -145,7 +139,7 @@ class ShellCommand implements ShellCommandInterface
             $command .= ' '. $this->parseFlow(FlowType::STDOUT, $this->getOutputFlow());
         }
 
-        if ($this->errorFlow !== false) {
+        if ($this->getErrorFlow() !== null) {
             $command .= ' ' . $this->parseFlow(FlowType::STDERR, $this->getErrorFlow());
         }
 

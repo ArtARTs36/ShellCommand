@@ -11,20 +11,9 @@ trait HasFlows
 
     private $errorFlow = null;
 
-    /**
-     * @return false|string
-     */
-    public function getErrorFlow()
+    public function getErrorFlow(): ?string
     {
-        if ($this->errorFlow === false) {
-            return false;
-        }
-
-        if ($this->inBackground && ! $this->errorFlow) {
-            return '/dev/null';
-        }
-
-        return $this->errorFlow ?? '&'. FlowType::STDOUT;
+        return $this->errorFlow;
     }
 
     public function getOutputFlow(): ?string
@@ -39,7 +28,7 @@ trait HasFlows
         return $this;
     }
 
-    public function setErrorFlow($error): ShellCommandInterface
+    public function setErrorFlow(string $error): ShellCommandInterface
     {
         $this->errorFlow = $error;
 
