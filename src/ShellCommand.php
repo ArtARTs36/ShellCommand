@@ -64,6 +64,8 @@ class ShellCommand implements ShellCommandInterface
      */
     public function execute(): CommandResult
     {
+        $this->isExecuted = true;
+
         return $this->executor->execute($this);
     }
 
@@ -77,6 +79,11 @@ class ShellCommand implements ShellCommandInterface
         $this->handleException($result);
 
         return $result;
+    }
+
+    public function isExecuted(): bool
+    {
+        return $this->isExecuted;
     }
 
     protected function prepareShellCommand(): string

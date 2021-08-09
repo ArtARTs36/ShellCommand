@@ -21,9 +21,16 @@ interface ShellCommandInterface
     public function setExecutor(ShellCommandExecutor $executor): ShellCommandInterface;
 
     /**
-     * Execute the shell script
+     * Execute the command
      */
     public function execute(): CommandResult;
+
+    /**
+     * @throws CommandFailed
+     */
+    public function executeOrFail(): CommandResult;
+
+    public function isExecuted(): bool;
 
     public function addArgument(string $value): self;
 
@@ -88,11 +95,6 @@ interface ShellCommandInterface
      * @return $this
      */
     public function join(ShellCommandInterface $command, bool $selfScope = false): ShellCommandInterface;
-
-    /**
-     * @throws CommandFailed
-     */
-    public function executeOrFail(): CommandResult;
 
     /**
      * @return array<ShellSettingInterface>
