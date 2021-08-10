@@ -2,11 +2,8 @@
 
 namespace ArtARTs36\ShellCommand;
 
-use ArtARTs36\ShellCommand\Executors\ProcOpenExecutor;
 use ArtARTs36\ShellCommand\Interfaces\CommandBuilder;
-use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
-use ArtARTs36\ShellCommand\Result\CommandResult;
 
 class ShellCommander implements CommandBuilder
 {
