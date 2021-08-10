@@ -38,9 +38,4 @@ class ShellCommander implements CommandBuilder
     {
         return $this->parser->createCommand($command);
     }
-
-    public function execute(ShellCommandInterface $command): CommandResult
-    {
-        return $command->execute($this->executor);
-    }
 }
