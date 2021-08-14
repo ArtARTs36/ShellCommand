@@ -107,4 +107,6 @@ interface ShellCommandInterface
      * @return array<CommandResult>
      */
     public function getResults(): array;
+
+    public function setExceptionTrigger(ExceptionTrigger $trigger): self;
 }

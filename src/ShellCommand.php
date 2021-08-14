@@ -10,6 +10,7 @@ use ArtARTs36\ShellCommand\Exceptions\ResultExceptionTrigger;
 use ArtARTs36\ShellCommand\Concerns\Fluent;
 use ArtARTs36\ShellCommand\Concerns\HasEnvVariables;
 use ArtARTs36\ShellCommand\Concerns\HasFlows;
+use ArtARTs36\ShellCommand\Interfaces\ExceptionTrigger;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandExecutor;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Settings\Pipe;
@@ -37,6 +38,13 @@ class ShellCommand implements ShellCommandInterface
     public function __construct(string $bin)
     {
         $this->bin = $bin;
+    }
+
+    public function setExceptionTrigger(ExceptionTrigger $trigger): ShellCommandInterface
+    {
+        $this->exceptions = $trigger;
+
+        return $this;
     }
 
     /**

@@ -2,10 +2,11 @@
 
 namespace ArtARTs36\ShellCommand\Exceptions;
 
+use ArtARTs36\ShellCommand\Interfaces\ExceptionTrigger;
 use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Result\ResultCode;
 
-class ResultExceptionTrigger
+class ResultExceptionTrigger implements ExceptionTrigger
 {
     /** @var <string, class-string<CommandFailed> */
     protected $map = [
