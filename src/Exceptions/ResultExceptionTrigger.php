@@ -13,6 +13,7 @@ class ResultExceptionTrigger implements ExceptionTrigger
         ResultCode::IS_NOT_EXECUTABLE => CommandIsNotExecutable::class,
         ResultCode::COMMAND_NOT_FOUND => CommandNotFound::class,
         ResultCode::GENERAL_ERRORS => CommandHasGeneralErrors::class,
+        ResultCode::COMMAND_GIVEN_INVALID_ARGUMENT => CommandGivenInvalidArgument::class,
     ];
 
     /**
