@@ -33,10 +33,10 @@ trait HasSettings
         return $this;
     }
 
-    public function addArguments(array $values): ShellCommandInterface
+    public function addArguments(array $values, bool $escape = true): ShellCommandInterface
     {
         foreach ($values as $value) {
-            $this->addSetting(new Argument($value));
+            $this->addSetting(new Argument($value, $escape));
         }
 
         return $this;
