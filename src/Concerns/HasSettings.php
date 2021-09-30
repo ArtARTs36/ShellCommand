@@ -72,16 +72,19 @@ trait HasSettings
         return $this;
     }
 
-    public function addCutOptionWithValue(string $option, string $value): ShellCommandInterface
-    {
-        $this->addSetting(new CutOption($option, $value));
+    public function addCutOptionWithValue(
+        string $option,
+        string $value,
+        bool $valueEscape = false
+    ): ShellCommandInterface {
+        $this->addSetting(new CutOption($option, $value, $valueEscape));
 
         return $this;
     }
 
-    public function addOptionWithValue(string $option, string $value): ShellCommandInterface
+    public function addOptionWithValue(string $option, string $value, bool $valueEscape = false): ShellCommandInterface
     {
-        $this->addSetting(new Option($option, $value));
+        $this->addSetting(new Option($option, $value, $valueEscape));
 
         return $this;
     }

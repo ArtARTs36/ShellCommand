@@ -49,12 +49,12 @@ interface ShellCommandInterface
      * Add cut option with value into command line
      * @return $this
      */
-    public function addCutOptionWithValue(string $option, string $value): self;
+    public function addCutOptionWithValue(string $option, string $value, bool $valueEscape = false): self;
 
     /**
      * Add option with value into command line
      */
-    public function addOptionWithValue(string $option, string $value): self;
+    public function addOptionWithValue(string $option, string $value, bool $valueEscape = false): self;
 
     /**
      * @return string

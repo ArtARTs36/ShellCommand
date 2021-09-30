@@ -12,15 +12,18 @@ class Option implements ShellSettingInterface
 
     protected $value;
 
-    public function __construct(string $option, ?string $value = null)
+    protected $valueEscape;
+
+    public function __construct(string $option, ?string $value = null, bool $valueEscape = false)
     {
         $this->option = $option;
         $this->value = $value;
+        $this->valueEscape = $valueEscape;
     }
 
     public function __toString(): string
     {
-        return '--'. $this->option . ($this->value ? '=' . $this->value : '');
+        return static::$prefix. $this->option . ($this->value ? '=' . $this->valueToString() : '');
     }
 
     public static function is(string $raw): bool
@@ -45,5 +48,14 @@ class Option implements ShellSettingInterface
         $raw = mb_substr($raw, mb_strlen(static::$prefix), mb_strlen($raw));
 
         return explode('=', $raw);
+    }
+
+    protected function valueToString(): string
+    {
+        if ($this->value === null) {
+            return '';
+        }
+
+        return $this->valueEscape ? escapeshellarg($this->value) : $this->value;
     }
 }
