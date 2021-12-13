@@ -63,6 +63,11 @@ class CommandResult
         return $this->code;
     }
 
+    public function equalsCode(int $code): bool
+    {
+        return $this->code === $code;
+    }
+
     public function isOk(): bool
     {
         return $this->code === ResultCode::OK;

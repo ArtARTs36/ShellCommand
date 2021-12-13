@@ -14,6 +14,7 @@ class ResultExceptionTrigger implements ExceptionTrigger
         ResultCode::COMMAND_NOT_FOUND => CommandNotFound::class,
         ResultCode::GENERAL_ERRORS => CommandHasGeneralErrors::class,
         ResultCode::COMMAND_GIVEN_INVALID_ARGUMENT => CommandGivenInvalidArgument::class,
+        'any' => CommandFailed::class,
     ];
 
     /**
@@ -25,13 +26,13 @@ class ResultExceptionTrigger implements ExceptionTrigger
             return;
         }
 
-        $class = $this->map[$result->getCode()];
+        $class = $this->map[$result->getCode()] ?? 'any';
 
         throw new $class($result);
     }
 
     public function isFailed(CommandResult $result): bool
     {
-        return array_key_exists($result->getCode(), $this->map);
+        return ! $result->equalsCode(ResultCode::OK);
     }
 }

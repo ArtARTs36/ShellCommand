@@ -4,7 +4,7 @@ namespace ArtARTs36\ShellCommand\Exceptions;
 
 use ArtARTs36\ShellCommand\Result\CommandResult;
 
-abstract class CommandFailed extends \RuntimeException
+class CommandFailed extends \RuntimeException
 {
     public $commandResult;
 
