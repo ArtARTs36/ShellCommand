@@ -26,7 +26,7 @@ class ResultExceptionTrigger implements ExceptionTrigger
             return;
         }
 
-        $class = $this->map[$result->getCode()] ?? 'any';
+        $class = $this->map[$result->getCode()] ?? $this->map['any'];
 
         throw new $class($result);
     }
