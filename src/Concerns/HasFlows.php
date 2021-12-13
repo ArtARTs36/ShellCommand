@@ -2,7 +2,6 @@
 
 namespace ArtARTs36\ShellCommand\Concerns;
 
-use ArtARTs36\ShellCommand\FlowType;
 use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 
 trait HasFlows

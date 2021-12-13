@@ -5,6 +5,9 @@ namespace ArtARTs36\ShellCommand\Interfaces;
 use ArtARTs36\ShellCommand\Exceptions\CommandFailed;
 use ArtARTs36\ShellCommand\Result\CommandResult;
 
+/**
+ * Interface for ShellCommand.
+ */
 interface ShellCommandInterface
 {
     public function addEnv(string $key, string $value): ShellCommandInterface;

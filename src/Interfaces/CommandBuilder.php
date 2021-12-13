@@ -2,6 +2,9 @@
 
 namespace ArtARTs36\ShellCommand\Interfaces;
 
+/**
+ * Builder for new commands.
+ */
 interface CommandBuilder
 {
     /**
