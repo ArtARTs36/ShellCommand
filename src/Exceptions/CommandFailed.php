@@ -12,6 +12,15 @@ class CommandFailed extends \RuntimeException
     {
         $this->commandResult = $result;
 
-        parent::__construct($result->getResult());
+        parent::__construct($this->prepareMessage());
+    }
+
+    protected function prepareMessage(): string
+    {
+        return sprintf(
+            'Stdout: %s. Stderr: %s',
+            $this->commandResult->getResult(),
+            $this->commandResult->getError()
+        );
     }
 }
