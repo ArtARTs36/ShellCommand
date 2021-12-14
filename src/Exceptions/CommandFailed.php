@@ -18,7 +18,8 @@ class CommandFailed extends \RuntimeException
     protected function prepareMessage(): string
     {
         return sprintf(
-            'Stdout: %s. Stderr: %s',
+            'Exit code: %d. Stdout: %s. Stderr: %s',
+            $this->commandResult->getCode(),
             $this->commandResult->getResult(),
             $this->commandResult->getError()
         );
