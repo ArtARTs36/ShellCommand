@@ -33,6 +33,6 @@ class ResultExceptionTrigger implements ExceptionTrigger
 
     public function isFailed(CommandResult $result): bool
     {
-        return ! $result->equalsCode(ResultCode::OK);
+        return $result->getCode() > ResultCode::OK;
     }
 }
