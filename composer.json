@@ -24,6 +24,11 @@
             "ArtARTs36\\ShellCommand\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "ArtARTs36\\ShellCommand\\Tests\\": "tests/"
+        }
+    },
     "scripts": {
         "lint": [
             "php-cs-fixer fix --dry-run --verbose --diff --ansi"
