@@ -1,4 +1,4 @@
-ShellCommand
+ShellCommand - wrapper for calls console commands
 ----
 
 ![PHP Composer](https://github.com/ArtARTs36/ShellCommand/workflows/Testing/badge.svg?branch=master)

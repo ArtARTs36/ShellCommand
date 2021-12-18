@@ -7,10 +7,13 @@ use ArtARTs36\ShellCommand\Interfaces\ShellCommandInterface;
 use ArtARTs36\ShellCommand\Result\CommandResult;
 use ArtARTs36\ShellCommand\Result\ResultCode;
 use ArtARTs36\Str\Str;
+use PHPUnit\Framework\Assert;
 
 class TestExecutor implements ShellCommandExecutor
 {
     protected $results = [];
+
+    protected $attempts = 0;
 
     public static function fromFail(
         string $stdErr = 'Fail',
@@ -29,6 +32,24 @@ class TestExecutor implements ShellCommandExecutor
         $instance->addSuccess(...func_get_args());
 
         return $instance;
+    }
+
+    public function addSuccesses(int $count): self
+    {
+        for ($i = 0; $i < $count; $i++) {
+            $this->addSuccess();
+        }
+
+        return $this;
+    }
+
+    public function addFails(int $count): self
+    {
+        for ($i = 0; $i < $count; $i++) {
+            $this->addFail();
+        }
+
+        return $this;
     }
 
     public function addFail(string $stdErr = 'Fail', int $code = ResultCode::GENERAL_ERRORS, string $stdout = ''): self
@@ -55,6 +76,8 @@ class TestExecutor implements ShellCommandExecutor
 
     public function execute(ShellCommandInterface $command): CommandResult
     {
+        $this->attempts++;
+
         $result = array_shift($this->results);
 
         if ($result === null) {
@@ -68,5 +91,10 @@ class TestExecutor implements ShellCommandExecutor
             Str::make($result['error']),
             $result['code']
         );
+    }
+
+    public function assertAttempts(int $expected): void
+    {
+        Assert::assertEquals($expected, $this->attempts);
     }
 }
