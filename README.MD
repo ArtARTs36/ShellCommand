@@ -42,7 +42,7 @@ var_dump($result->getResult());
 var_dump($result->getError());
 ```
 
-#### 2. SSH
+#### 3. SSH
 
 To use ssh, you need to connect the library ["artarts36/shell-command-ssh-executor"](https://github.com/ArtARTs36/php-shell-command-ssh-executor):
 
@@ -60,4 +60,17 @@ $command = \ArtARTs36\ShellCommand\ShellCommand::make('ls');
 $command->setExecutor(new \ArtARTs36\ShellCommandSshExecutor\SshCommandExecutor($connection));
 
 var_dump($command->getShellResult());
+```
+
+#### 4. Mocking
+
+```php
+
+$executor = new \ArtARTs36\ShellCommand\Executors\TestExecutor();
+
+$command = new \ArtARTs36\ShellCommand\ShellCommand('reboot');
+
+$executor->addSuccess('OK');
+
+$command->execute($executor);
 ```
