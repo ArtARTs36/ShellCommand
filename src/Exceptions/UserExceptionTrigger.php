@@ -11,7 +11,7 @@ class UserExceptionTrigger implements ExceptionTrigger
 
     protected $callbacks;
 
-    public function __construct(ResultExceptionTrigger $trigger, array $callbacks)
+    final public function __construct(ResultExceptionTrigger $trigger, array $callbacks)
     {
         $this->trigger = $trigger;
         $this->callbacks = $callbacks;

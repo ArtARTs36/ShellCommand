@@ -8,7 +8,7 @@ use ArtARTs36\ShellCommand\Result\ResultCode;
 
 class ResultExceptionTrigger implements ExceptionTrigger
 {
-    /** @var <string, class-string<CommandFailed> */
+    /** @var array<string|int, class-string<CommandFailed>> */
     protected $map = [
         ResultCode::IS_NOT_EXECUTABLE => CommandIsNotExecutable::class,
         ResultCode::COMMAND_NOT_FOUND => CommandNotFound::class,
