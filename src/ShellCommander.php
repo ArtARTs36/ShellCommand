@@ -23,7 +23,7 @@ class ShellCommander implements CommandBuilder
             ->make(ShellCommand::NAVIGATE_TO_DIR)
             ->addArgument($to)
             ->addAmpersands()
-            ->addArgument($bin);
+            ->addArgument($bin, false);
     }
 
     public function make(string $bin = ''): ShellCommandInterface
