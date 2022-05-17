@@ -19,11 +19,16 @@ class ShellCommander implements CommandBuilder
         $real = realpath($dir);
         $to = $real === false ? $dir : $real;
 
-        return $this
+        $cmd = $this
             ->make(ShellCommand::NAVIGATE_TO_DIR)
             ->addArgument($to)
-            ->addAmpersands()
-            ->addArgument($bin, false);
+            ->addAmpersands();
+
+        foreach (explode(' ', $bin) as $binPart) {
+            $cmd->addArgument($binPart);
+        }
+
+        return $cmd;
     }
 
     public function make(string $bin = ''): ShellCommandInterface
