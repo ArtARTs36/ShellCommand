@@ -8,3 +8,4 @@
 /tests              export-ignore
 /.github            export-ignore
 /README.md          export-ignore
+.mr-linter.yml      export-ignore
